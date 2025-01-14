@@ -1,2 +1,6 @@
-package com.book.store.models.mappers;public class UserMapper {
-}
+//package com.book.store.models.mappers;
+//
+//
+//
+//public interface UserMapper {
+//}

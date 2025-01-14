@@ -1,2 +1,5 @@
-package com.book.store.service;public class MonitoringService {
+package com.book.store.service;
+
+public interface MonitoringService {
+    boolean isDatabaseUp();
 }
