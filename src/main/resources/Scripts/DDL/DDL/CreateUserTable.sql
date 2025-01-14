@@ -1,4 +1,4 @@
---Creating a User record table
+--Creating a User record table. ID is an identity key and Usernam is an unique key
 DROP TABLE IF EXISTS UserRecord
 CREATE TABLE UserRecord
 (
