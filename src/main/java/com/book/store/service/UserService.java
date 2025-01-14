@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface UserService {
 
     List<User> getUsrList();
-    Optional<User> getUsrByID(int ID);
+    User getUsrByUserName(String userName);
     User addUser(User usr) throws BadRequestException;
     String updateUser(String UserName, User u, String uName) throws BadRequestException;
     Integer deleteUser(int ID,int userId) throws BadRequestException;

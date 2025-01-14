@@ -29,12 +29,12 @@ public class UserController {
             return this.usrSrvc.getUsrList();
     }
 
-    @GetMapping("/User/{ID}")
-    public Optional<User> getUsersByID(@PathVariable int ID) throws BadRequestException {
+    @GetMapping("/User/{userName}")
+    public User getUsersByUserName(@PathVariable String userName) throws BadRequestException {
         try{
-            return this.usrSrvc.getUsrByID(ID);
+            return this.usrSrvc.getUsrByUserName(userName);
         }catch( Exception ex){
-            throw  new BadRequestException("Invalid User ID ");
+            throw  new BadRequestException("Invalid User Name ");
         }
 
     }
