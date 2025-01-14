@@ -53,8 +53,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public String updateUser(String UserName, User u, String uName) throws BadRequestException {
         Boolean isAdmin = usrRepo.findAll().getFirst().getIsAdmin();
-        System.out.println("UserName: " + UserName);
-        System.out.println("isadmin: " + isAdmin);
         if(isAdmin) {
             usrRepo.save(u);
         }else if(Objects.equals(UserName, uName)){
