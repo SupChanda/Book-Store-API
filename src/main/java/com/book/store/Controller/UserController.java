@@ -55,8 +55,8 @@ public class UserController {
             return new ResponseEntity<>(this.usrSrvc.updateUser(UserName, u,uName), HttpStatus.OK);
         }catch (Exception ex){
             //return new ResponseEntity<>()
-            System.out.println(ex.getMessage());
-            throw new BadRequestException(ex);
+            //System.out.println(ex.getMessage());
+            throw new BadRequestException(ex.getMessage());
         }
     }
 
