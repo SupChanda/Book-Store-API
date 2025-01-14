@@ -4,6 +4,7 @@ import com.book.store.models.domain.User;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,5 +17,5 @@ public interface UserService {
     User getUsrByUserName(String userName);
     User addUser(User usr) throws BadRequestException;
     String updateUser(String UserName, User u, String uName) throws BadRequestException;
-    Integer deleteUser(int ID,int userId) throws BadRequestException;
+    String deleteUser(String UserName,String uName) throws BadRequestException;
 }

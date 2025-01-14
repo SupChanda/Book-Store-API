@@ -60,10 +60,10 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/User/{ID}")
-    public ResponseEntity<String> deleteUser(@PathVariable int ID,@RequestHeader int userId) throws BadRequestException { // TO DO : Validation if the user exists , else throw an exception
+    @DeleteMapping("/User/{UserName}")
+    public ResponseEntity<String> deleteUser(@PathVariable String UserName,@RequestHeader String uName) throws BadRequestException { // TO DO : Validation if the user exists , else throw an exception
         try{
-            return new ResponseEntity<>(this.usrSrvc.deleteUser(ID,userId) + " user id has been deleted",HttpStatus.OK);
+            return new ResponseEntity<>(this.usrSrvc.deleteUser(UserName,uName) + " user name has been deleted",HttpStatus.OK);
         }catch (Exception ex){
             System.out.println(ex.getMessage());
             throw new BadRequestException(ex);
