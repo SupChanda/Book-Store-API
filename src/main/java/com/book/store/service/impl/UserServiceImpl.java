@@ -17,7 +17,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     User usr;
     @Autowired
-    List<User> uList;// = new ArrayList<>(); // Make a call from DB and get
+    List<User> uList;
     @Autowired
     UserRepository usrRepo;
 
@@ -75,5 +75,4 @@ public class UserServiceImpl implements UserService {
         }
         return ID;
     }
-
 }
