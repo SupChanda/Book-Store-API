@@ -52,17 +52,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String updateUser(String UserName, User u, String uName) throws BadRequestException {
-        Boolean isAdmin = usrRepo.findAll().getFirst().getIsAdmin();
-        if(isAdmin) {
-            usrRepo.save(u);
-        }else if(Objects.equals(UserName, uName)){
-            usrRepo.save(u);
+        Boolean isAdmin = false;
+        Boolean err = false;
+        User adminUser = usrRepo.findByUserName(uName);
+        User usr = usrRepo.findByUserName(UserName);
+        if(adminUser.getIsAdmin() || Objects.equals(UserName, uName)){
+                u.setId(usr.getId());
+                usrRepo.save(u);
         }
         else{
             throw new BadRequestException("UserName : = " + uName + " is not an admin user name");
         }
         return UserName + " details have been updated ";
     }
+
     @Override
     public Integer deleteUser(int ID,int UserId) throws BadRequestException {
         Boolean IsAdmin = usrRepo.findById(UserId).get().getIsAdmin();
