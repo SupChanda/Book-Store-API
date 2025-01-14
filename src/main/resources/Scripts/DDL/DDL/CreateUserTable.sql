@@ -1,3 +1,4 @@
+--Creating a User record table
 DROP TABLE IF EXISTS UserRecord
 CREATE TABLE UserRecord
 (
