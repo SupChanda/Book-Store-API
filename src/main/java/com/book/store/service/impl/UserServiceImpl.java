@@ -27,8 +27,8 @@ public class UserServiceImpl implements UserService {
             return usrRepo.findAll();
     }
     @Override
-    public Optional<User> getUsrByID(int ID) {
-            return usrRepo.findById(ID);
+    public User getUsrByUserName(String userName) {
+            return usrRepo.findByUserName(userName);
     }
     @Override
     public User addUser(User usr) throws BadRequestException {
