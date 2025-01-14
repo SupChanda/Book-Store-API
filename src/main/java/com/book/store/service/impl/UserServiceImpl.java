@@ -67,15 +67,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Integer deleteUser(int ID,int UserId) throws BadRequestException {
-        Boolean IsAdmin = usrRepo.findById(UserId).get().getIsAdmin();
-        if(IsAdmin){
-            this.usrRepo.deleteById(ID);
-        }else if(ID == UserId){
+    public String deleteUser(String UserName, String uName) throws BadRequestException {
+        Boolean IsAdmin = usrRepo.findByUserName(uName).getIsAdmin();
+        Integer ID = usrRepo.findByUserName(UserName).getId();
+        System.out.println("Is admin: " + IsAdmin + " ID: " + ID);
+        if(IsAdmin || UserName.equals(uName)){
             this.usrRepo.deleteById(ID);
         }else{
-            throw new BadRequestException("The user id " + UserId + " is neither an admin nor the user whose id is : " + ID);
+            throw new BadRequestException("The user name " + UserName + " is neither an admin nor the user whose id is : " + ID);
         }
-        return ID;
+        return UserName;
     }
 }
