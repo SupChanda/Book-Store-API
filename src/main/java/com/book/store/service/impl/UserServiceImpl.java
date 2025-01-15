@@ -31,8 +31,9 @@ public class UserServiceImpl implements UserService {
             return usrRepo.findByUserName(userName);
     }
     @Override
-    public User addUser(User usr) throws BadRequestException {
+    public String addUser(User usr) throws BadRequestException {
         String uName = usr.getUserName();
+        String errMessage = "The username " + uName + " is already present.";
         for(User u: usrRepo.findAll()){
             if (u.getUserName().equals(uName)){
                 nameAlreadyPresent = true;
@@ -44,38 +45,46 @@ public class UserServiceImpl implements UserService {
             usrRepo.save(usr);
         }else{
             nameAlreadyPresent = false;
-            System.out.println("The username " + uName + " is already present.");
-            throw new BadRequestException("The username " + uName + " is already present.");
+            System.out.println(errMessage);
+            throw new BadRequestException(errMessage);
         }
-        return usr;
+        return uName + " user record has been added";
     }
 
     @Override
     public String updateUser(String UserName, User u, String uName) throws BadRequestException {
         Boolean isAdmin = false;
         Boolean err = false;
+        String errMessage = uName + " cannot update " + UserName +"'s record because either "
+                + uName + " is not an admin user or " + UserName + "'s record doesn't exists";
         User adminUser = usrRepo.findByUserName(uName);
         User usr = usrRepo.findByUserName(UserName);
+        if(adminUser == null|| usr == null){
+            System.out.println(errMessage);
+            throw new BadRequestException(errMessage);
+        }
         if(adminUser.getIsAdmin() || Objects.equals(UserName, uName)){
                 u.setId(usr.getId());
                 usrRepo.save(u);
         }
         else{
-            throw new BadRequestException("UserName : = " + uName + " is not an admin user name");
+            System.out.println(errMessage);
+            throw new BadRequestException(errMessage);
         }
-        return UserName + " details have been updated ";
+        return uName + " updated " + UserName + " record";
     }
 
     @Override
     public String deleteUser(String UserName, String uName) throws BadRequestException {
         Boolean IsAdmin = usrRepo.findByUserName(uName).getIsAdmin();
         Integer ID = usrRepo.findByUserName(UserName).getId();
-        System.out.println("Is admin: " + IsAdmin + " ID: " + ID);
+        String errMessage = uName + " is trying to delete "+ UserName + " record, which is not his/her username";
         if(IsAdmin || UserName.equals(uName)){
             this.usrRepo.deleteById(ID);
         }else{
-            throw new BadRequestException("The user name " + UserName + " is neither an admin nor the user whose id is : " + ID);
+            System.out.println(errMessage);
+            throw new BadRequestException(errMessage);
         }
-        return UserName;
+        return uName + " deleted " + UserName + "'s record";
     }
 }
