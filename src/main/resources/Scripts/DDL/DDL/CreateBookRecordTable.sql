@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS BookRecord
 CREATE TABLE BookRecord
 (
     ID                      INT NOT NULL IDENTITY(0,1)
-    ,UserID                 INT NOT NULL
+    ,UserName               VARCHAR(80)
     ,Title                  VARCHAR(80) NOT NULL UNIQUE
     ,Author                 VARCHAR(80) NOT NULL
     ,Genre                  VARCHAR(80) NOT NULL
@@ -11,5 +11,5 @@ CREATE TABLE BookRecord
     ,ReturnDate             DATE
     ,[Price($)]             DECIMAL(10,2)
     ,[RentalFee($)]         DECIMAL(10,2)
-    ,CONSTRAINT FK_BookRecord_UserID   FOREIGN KEY (UserID)   REFERENCES  UserRecord(ID)
+    ,CONSTRAINT FK_BookRecord_UserName   FOREIGN KEY (UserName)   REFERENCES  UserRecord(UserName)
 )

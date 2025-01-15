@@ -76,11 +76,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String deleteUser(String UserName, String uName) throws BadRequestException {
-        Boolean IsAdmin = usrRepo.findByUserName(uName).getIsAdmin();
-        Integer ID = usrRepo.findByUserName(UserName).getId();
-        String errMessage = uName + " is trying to delete "+ UserName + " record, which is not his/her username";
-        if(IsAdmin || UserName.equals(uName)){
-            this.usrRepo.deleteById(ID);
+        String errMessage =  uName + " cannot delete " + UserName +"'s record because either "
+                + uName + " is not an admin user or " + UserName + "'s record doesn't exists";
+        User adminUser = usrRepo.findByUserName(uName);
+        User usr = usrRepo.findByUserName(UserName);
+        if(usrRepo.findByUserName(uName) == null || usrRepo.findByUserName(UserName) == null ){
+            System.out.println(errMessage);
+            throw new BadRequestException(errMessage);
+        }
+        else if(adminUser.getIsAdmin() || UserName.equals(uName)){
+            this.usrRepo.deleteById(usr.getId());
         }else{
             System.out.println(errMessage);
             throw new BadRequestException(errMessage);
