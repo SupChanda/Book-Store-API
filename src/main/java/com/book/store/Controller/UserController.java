@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @PostMapping("/User")
-    public ResponseEntity<User> addUser(@RequestBody User usr) throws BadRequestException { // TO DO: take one user at a time
+    public ResponseEntity<String> addUser(@RequestBody User usr) throws BadRequestException { // TO DO: take one user at a time
         try{
             return new ResponseEntity<>(this.usrSrvc.addUser(usr),HttpStatus.OK);
         }catch(Exception ex){
@@ -63,10 +63,10 @@ public class UserController {
     @DeleteMapping("/User/{UserName}")
     public ResponseEntity<String> deleteUser(@PathVariable String UserName,@RequestHeader String uName) throws BadRequestException { // TO DO : Validation if the user exists , else throw an exception
         try{
-            return new ResponseEntity<>(this.usrSrvc.deleteUser(UserName,uName) + " user name has been deleted",HttpStatus.OK);
+            return new ResponseEntity<>(this.usrSrvc.deleteUser(UserName,uName),HttpStatus.OK);
         }catch (Exception ex){
-            System.out.println(ex.getMessage());
-            throw new BadRequestException(ex);
+            //System.out.println(ex.getMessage());
+            throw new BadRequestException(ex.getMessage());
         }
 
     }

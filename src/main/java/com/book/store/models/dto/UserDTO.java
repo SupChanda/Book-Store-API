@@ -4,15 +4,13 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.stereotype.Component;
 
-@Entity
-@Component
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Getter
 @Setter
 public class UserDTO {
-
 
     private int id;
 
