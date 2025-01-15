@@ -1,4 +1,29 @@
 package com.book.store.models.dto;
 
-public class UserDTO {// look exactly similar to User .
+import jakarta.persistence.*;
+import lombok.*;
+import org.springframework.stereotype.Component;
+
+@Entity
+@Component
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@Getter
+@Setter
+public class UserDTO {
+
+
+    private int id;
+
+    private String userName;
+
+    private String password;
+
+    private String firstName;
+
+    private String lastName;
+
+    private Boolean isAdmin;
+
 }
