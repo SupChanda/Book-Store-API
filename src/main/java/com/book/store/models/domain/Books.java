@@ -19,10 +19,10 @@ public class Books {
     @Column(name = "ID")
     private int id;
 
-    @Column(name = "UserID")
-    private int userID;
+    @Column(name = "AssignedTo",nullable = true)
+    private String assignedTo;
 
-    @Column(name = "Title")
+    @Column(name = "Title",unique = true)
     private String title;
 
     @Column(name = "Author")
@@ -43,8 +43,8 @@ public class Books {
     @Column(name = "RentalFee")
     private float rentalFee;
 
-
-
+    @Column(name = "CreatedBy")
+    private String createdBy;
 
 
 }
