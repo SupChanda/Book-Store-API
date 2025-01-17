@@ -8,4 +8,6 @@ import java.util.List;
 public interface BooksManagementService {
     List<Books> getBooks();
     String createBooks(Books bk, String admin);
+    String updateBooks(String title,Books bk, String admin);
+    String deleteBooks(String title, String admin);
 }

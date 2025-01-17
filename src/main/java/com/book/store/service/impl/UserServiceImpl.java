@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
             System.out.println(errMessage);
             throw new BadRequestException(errMessage);
         }
-        else if(adminUser.getIsAdmin() || UserName.equals(uName)){
+        else if(adminUser.getIsAdmin() || UserName.equalsIgnoreCase(uName)){
             this.usrRepo.deleteById(usr.getId());
         }else{
             System.out.println(errMessage);
