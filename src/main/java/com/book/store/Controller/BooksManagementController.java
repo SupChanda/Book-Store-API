@@ -24,6 +24,15 @@ public class BooksManagementController {
         }
     }
 
+    @GetMapping("/Books/{title}")
+    public ResponseEntity<Books> getBookByTitle(@PathVariable String title) throws BadRequestException {
+        try{
+            return new ResponseEntity<>(this.bkSrvc.getBookByTitle(title), HttpStatus.OK);
+        }catch(Exception ex){
+            throw new BadRequestException(ex);
+        }
+    }
+
 
     @PostMapping("/Books")
     public ResponseEntity<String> createBooks(@RequestBody Books bk, @RequestHeader String admin) throws BadRequestException {
