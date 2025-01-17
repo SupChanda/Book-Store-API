@@ -34,4 +34,22 @@ public class BooksManagementController {
         }
     }
 
+    @PutMapping("/Books/{title}")
+    public ResponseEntity<String> updateBooks(@PathVariable String title, @RequestBody Books bk, @RequestHeader String admin) throws BadRequestException {
+        try{
+            return new ResponseEntity<>(this.bkSrvc.updateBooks(title,bk,admin), HttpStatus.OK);
+        }catch(Exception ex){
+            throw new BadRequestException(ex.getMessage());
+        }
+    }
+
+    @DeleteMapping("/Books/{title}")
+    public ResponseEntity<String> deleteBooks(@PathVariable String title, @RequestHeader String admin) throws BadRequestException {
+        try{
+            return new ResponseEntity<>(this.bkSrvc.deleteBooks(title,admin), HttpStatus.OK);
+        }catch(Exception ex){
+            throw new BadRequestException(ex.getMessage());
+        }
+    }
+
 }
