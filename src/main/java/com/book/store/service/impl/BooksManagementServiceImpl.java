@@ -34,6 +34,13 @@ public class BooksManagementServiceImpl implements BooksManagementService{
         return bkRepo.findAll();
     }
 
+    public Books getBookByTitle(String title) throws BadRequestException {
+        if(bkRepo.findByTitle(title) == null){
+            throw new BadRequestException("Invalid "+ title);
+        }
+        return bkRepo.findByTitle(title);
+    }
+
     @Override
     public String createBooks(Books bk,String admin){
         String bTitle = bk.getTitle();
