@@ -10,49 +10,47 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLDataException;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
 public class UserController {
     @Autowired
-    UserService usrSrvc;
+    UserService userService;
 //    @Autowired
 //    private final UserMapper uMap;
 
 //TO DO : get the data from JPARepository. Later on we will discuss about DAO
 
-    @GetMapping("/User")
+    @GetMapping("/user")
     public List<User> getUsers(){
-            return this.usrSrvc.getUsrList();
+            return this.userService.getUsrList();
     }
 
-    @GetMapping("/User/{userName}")
+    @GetMapping("/user/{userName}") // TO DO : Add userid as well
     public User getUsersByUserName(@PathVariable String userName) throws BadRequestException {
         try{
-            return this.usrSrvc.getUsrByUserName(userName);
+            return this.userService.getUsrByUserName(userName);
         }catch( Exception ex){
-            throw  new BadRequestException("Invalid User Name ");
+            throw  new BadRequestException(ex.getMessage());
         }
 
     }
 
-    @PostMapping("/User")
+    @PostMapping("/user")
     public ResponseEntity<String> addUser(@RequestBody User usr) throws BadRequestException { // TO DO: take one user at a time
         try{
-            return new ResponseEntity<>(this.usrSrvc.addUser(usr),HttpStatus.OK);
+            return new ResponseEntity<>(this.userService.addUser(usr),HttpStatus.OK);
         }catch(Exception ex){
             throw new BadRequestException(ex.getMessage());
         }
     }
 
-    @PutMapping("/User/{UserName}") //TO DO : header implementation to check whether  the user is admin or user himself
-    public ResponseEntity<String> updateUser(@PathVariable String UserName, @RequestBody User u, @RequestHeader String uName) throws BadRequestException { // TO DO : Validation if the user exists , else throw an exception
+    @PutMapping("/user/{userName}") //TO DO : header implementation to check whether  the user is admin or user himself
+    public ResponseEntity<String> updateUser(@PathVariable String userName, @RequestBody User user, @RequestHeader String currentUser) throws BadRequestException { // TO DO : Validation if the user exists , else throw an exception
         try{
-            // this.usrSrvc.updateUser(ID, u,userid);// TO DO : update for JPARepository
-            return new ResponseEntity<>(this.usrSrvc.updateUser(UserName, u,uName), HttpStatus.OK);
+            //this.userService.updateUser(ID, u,userid);
+            return new ResponseEntity<>(this.userService.updateUser(userName, user,currentUser), HttpStatus.OK);
         }catch (Exception ex){
             //return new ResponseEntity<>()
             //System.out.println(ex.getMessage());
@@ -60,10 +58,10 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/User/{UserName}")
-    public ResponseEntity<String> deleteUser(@PathVariable String UserName,@RequestHeader String uName) throws BadRequestException { // TO DO : Validation if the user exists , else throw an exception
+    @DeleteMapping("/user/{userName}")
+    public ResponseEntity<String> deleteUser(@PathVariable String userName,@RequestHeader String currentUser) throws BadRequestException { // TO DO : Validation if the user exists , else throw an exception
         try{
-            return new ResponseEntity<>(this.usrSrvc.deleteUser(UserName,uName),HttpStatus.OK);
+            return new ResponseEntity<>(this.userService.deleteUser(userName,currentUser),HttpStatus.OK);
         }catch (Exception ex){
             //System.out.println(ex.getMessage());
             throw new BadRequestException(ex.getMessage());

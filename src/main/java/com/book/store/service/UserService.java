@@ -14,8 +14,8 @@ import java.util.Optional;
 public interface UserService {
 
     List<User> getUsrList();
-    User getUsrByUserName(String userName);
+    User getUsrByUserName(String userName) throws BadRequestException;
     String addUser(User usr) throws BadRequestException;
-    String updateUser(String UserName, User u, String uName) throws BadRequestException;
-    String deleteUser(String UserName,String uName) throws BadRequestException;
+    String updateUser(String UserName, User u, String currentUser) throws BadRequestException;
+    String deleteUser(String UserName,String currentUser) throws BadRequestException;
 }

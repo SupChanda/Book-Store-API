@@ -5,7 +5,7 @@ import lombok.*;
 import org.springframework.stereotype.Component;
 
 @Entity
-@Table(name = "UserRecord")
+@Table(name = "Book_User")
 @Component
 @AllArgsConstructor
 @NoArgsConstructor

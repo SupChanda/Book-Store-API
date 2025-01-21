@@ -8,7 +8,7 @@ import java.time.*;
 @Entity
 @Getter
 @Setter
-@Table(name = "BookRecord")
+@Table(name = "Book_Record")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -19,9 +19,6 @@ public class Books {
     @Column(name = "ID")
     private int id;
 
-    @Column(name = "AssignedTo",nullable = true)
-    private String assignedTo;
-
     @Column(name = "Title",unique = true)
     private String title;
 
@@ -31,20 +28,15 @@ public class Books {
     @Column(name = "Genre")
     private String genre;
 
-    @Column(name = "TransactionType")
-    private String transactionType;
-
-    @Column(name = "ReturnDate")
-    private LocalDate returnDate;
-
     @Column(name = "Price")
     private float price;
 
     @Column(name = "RentalFee")
     private float rentalFee;
+//
+//    @Column(name = "CreatedBy")
+//    private String createdBy;
 
-    @Column(name = "CreatedBy")
-    private String createdBy;
-
-
+    @Column(name = "NoOfCopies")
+    private int noOfCopies;
 }
