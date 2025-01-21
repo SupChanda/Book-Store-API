@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends JpaRepository<User,Integer> {
-    User findByUserName(String uName);
+    User findByUserName(String uName); // TO DO : User repo implementation custom query. DAO implementation for reference
 }

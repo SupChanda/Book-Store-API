@@ -4,18 +4,17 @@ import com.book.store.models.domain.User;
 import com.book.store.service.UserService;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.book.store.Repository.UserRepository;
 
+import javax.management.BadAttributeValueExpException;
 import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    User usr;
+    User user;
     @Autowired
     List<User> uList;
     @Autowired
@@ -27,69 +26,74 @@ public class UserServiceImpl implements UserService {
             return usrRepo.findAll();
     }
     @Override
-    public User getUsrByUserName(String userName) {
-            return usrRepo.findByUserName(userName);
+    public User getUsrByUserName(String userName) throws BadRequestException {
+            User user =  usrRepo.findByUserName(userName);
+            if(user == null){
+                throw new BadRequestException("Invalid username");
+            }
+            return user;
     }
     @Override
-    public String addUser(User usr) throws BadRequestException {
-        String uName = usr.getUserName();
+    public String addUser(User user) throws BadRequestException {
+        String uName = user.getUserName();
         String errMessage = "The username " + uName + " is already present.";
         for(User u: usrRepo.findAll()){
-            if (u.getUserName().equals(uName)){
-                nameAlreadyPresent = true;
-                break;
+            if (u.getUserName().equalsIgnoreCase(uName)){
+                //nameAlreadyPresent = true;
+                return errMessage;
+               // throw new BadRequestException(errMessage);
             }
         }
-        if(!nameAlreadyPresent){
+        //if(!nameAlreadyPresent){
             //System.out.println("name already present : " + nameAlreadyPresent);
-            usrRepo.save(usr);
-        }else{
-            nameAlreadyPresent = false;
-            System.out.println(errMessage);
-            throw new BadRequestException(errMessage);
-        }
+            usrRepo.save(user);
+//        }else{
+//            nameAlreadyPresent = false;
+//            System.out.println(errMessage);
+//            throw new BadRequestException(errMessage);
+//        }
         return uName + " user record has been added";
     }
 
     @Override
-    public String updateUser(String UserName, User u, String uName) throws BadRequestException {
+    public String updateUser(String userName, User user, String currentUser) throws BadRequestException {
         Boolean isAdmin = false;
         Boolean err = false;
-        String errMessage = uName + " cannot update " + UserName +"'s record because either "
-                + uName + " is not an admin user or " + UserName + "'s record doesn't exists";
-        User adminUser = usrRepo.findByUserName(uName);
-        User usr = usrRepo.findByUserName(UserName);
+        String errMessage = currentUser + " cannot update " + userName +"'s record because either "
+                + currentUser + " is not an admin user or " + userName + "'s record doesn't exists";
+        User adminUser = usrRepo.findByUserName(currentUser);
+        User usr = usrRepo.findByUserName(userName);
         if(adminUser == null|| usr == null){
             System.out.println(errMessage);
             throw new BadRequestException(errMessage);
         }
-        if(adminUser.getIsAdmin() || Objects.equals(UserName, uName)){
-                u.setId(usr.getId());
-                usrRepo.save(u);
+        if(adminUser.getIsAdmin() || Objects.equals(userName, currentUser)){
+                user.setId(usr.getId());
+                usrRepo.save(user);
         }
         else{
             System.out.println(errMessage);
             throw new BadRequestException(errMessage);
         }
-        return uName + " updated " + UserName + " record";
+        return currentUser + " updated " + userName + " record";
     }
 
     @Override
-    public String deleteUser(String UserName, String uName) throws BadRequestException {
-        String errMessage =  uName + " cannot delete " + UserName +"'s record because either "
-                + uName + " is not an admin user or " + UserName + "'s record doesn't exists";
-        User adminUser = usrRepo.findByUserName(uName);
-        User usr = usrRepo.findByUserName(UserName);
-        if(usrRepo.findByUserName(uName) == null || usrRepo.findByUserName(UserName) == null ){
+    public String deleteUser(String userName, String currentUser) throws BadRequestException {
+        String errMessage =  currentUser + " cannot delete " + userName +"'s record because either "
+                + currentUser + " is not an admin user or " + userName + "'s record doesn't exists";
+        User adminUser = usrRepo.findByUserName(currentUser);
+        User usr = usrRepo.findByUserName(userName);
+        if(usrRepo.findByUserName(currentUser) == null || usrRepo.findByUserName(userName) == null ){
             System.out.println(errMessage);
             throw new BadRequestException(errMessage);
         }
-        else if(adminUser.getIsAdmin() || UserName.equalsIgnoreCase(uName)){
+        else if(adminUser.getIsAdmin() || userName.equalsIgnoreCase(currentUser)){
             this.usrRepo.deleteById(usr.getId());
         }else{
             System.out.println(errMessage);
             throw new BadRequestException(errMessage);
         }
-        return uName + " deleted " + UserName + "'s record";
+        return currentUser + " deleted " + userName + "'s record";
     }
 }

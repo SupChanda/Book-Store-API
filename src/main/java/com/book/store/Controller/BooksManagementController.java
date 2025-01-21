@@ -1,7 +1,7 @@
 package com.book.store.Controller;
 
 import com.book.store.models.domain.Books;
-import com.book.store.service.impl.BooksManagementService;
+import com.book.store.service.BooksManagementService;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,48 +14,48 @@ import java.util.List;
 public class BooksManagementController {
 
     @Autowired
-    BooksManagementService bkSrvc;
-    @GetMapping("/Books")
+    BooksManagementService booksManagementService;
+    @GetMapping("/books")
     public ResponseEntity<List<Books>> getBooks() throws BadRequestException {
         try{
-            return new ResponseEntity<>(this.bkSrvc.getBooks(), HttpStatus.OK);
+            return new ResponseEntity<>(this.booksManagementService.getBooks(), HttpStatus.OK);
         }catch(Exception ex){
             throw new BadRequestException(ex.getMessage());
         }
     }
 
-    @GetMapping("/Books/{title}")
+    @GetMapping("/books/{title}")
     public ResponseEntity<Books> getBookByTitle(@PathVariable String title) throws BadRequestException {
         try{
-            return new ResponseEntity<>(this.bkSrvc.getBookByTitle(title), HttpStatus.OK);
+            return new ResponseEntity<>(this.booksManagementService.getBookByTitle(title), HttpStatus.OK);
         }catch(Exception ex){
             throw new BadRequestException(ex);
         }
     }
 
 
-    @PostMapping("/Books")
-    public ResponseEntity<String> createBooks(@RequestBody Books bk, @RequestHeader String admin) throws BadRequestException {
+    @PostMapping("/books")
+    public ResponseEntity<String> createBooks(@RequestBody Books bk, @RequestHeader String currentUser) throws BadRequestException {
         try{
-            return new ResponseEntity<>(this.bkSrvc.createBooks(bk,admin), HttpStatus.OK);
+            return new ResponseEntity<>(this.booksManagementService.createBooks(bk,currentUser), HttpStatus.OK);
         }catch(Exception ex){
             throw new BadRequestException(ex.getMessage());
         }
     }
 
-    @PutMapping("/Books/{title}")
-    public ResponseEntity<String> updateBooks(@PathVariable String title, @RequestBody Books bk, @RequestHeader String admin) throws BadRequestException {
+    @PutMapping("/books/{title}")
+    public ResponseEntity<String> updateBooks(@PathVariable String title, @RequestBody Books bk, @RequestHeader String currentUser) throws BadRequestException {
         try{
-            return new ResponseEntity<>(this.bkSrvc.updateBooks(title,bk,admin), HttpStatus.OK);
+            return new ResponseEntity<>(this.booksManagementService.updateBooks(title,bk,currentUser), HttpStatus.OK);
         }catch(Exception ex){
             throw new BadRequestException(ex.getMessage());
         }
     }
 
-    @DeleteMapping("/Books/{title}")
-    public ResponseEntity<String> deleteBooks(@PathVariable String title, @RequestHeader String admin) throws BadRequestException {
+    @DeleteMapping("/books/{title}")
+    public ResponseEntity<String> deleteBooks(@PathVariable String title, @RequestHeader String currentUser) throws BadRequestException {
         try{
-            return new ResponseEntity<>(this.bkSrvc.deleteBooks(title,admin), HttpStatus.OK);
+            return new ResponseEntity<>(this.booksManagementService.deleteBooks(title,currentUser), HttpStatus.OK);
         }catch(Exception ex){
             throw new BadRequestException(ex.getMessage());
         }

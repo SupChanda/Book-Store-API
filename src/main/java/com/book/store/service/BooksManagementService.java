@@ -1,4 +1,4 @@
-package com.book.store.service.impl;
+package com.book.store.service;
 
 import com.book.store.models.domain.Books;
 import org.apache.coyote.BadRequestException;
@@ -10,6 +10,6 @@ public interface BooksManagementService {
     List<Books> getBooks();
     String createBooks(Books bk, String admin);
     Books getBookByTitle(String title) throws BadRequestException;
-    String updateBooks(String title,Books bk, String admin);
-    String deleteBooks(String title, String admin);
+    String updateBooks(String title,Books bk, String currentUser);
+    String deleteBooks(String title, String currentUser);
 }
