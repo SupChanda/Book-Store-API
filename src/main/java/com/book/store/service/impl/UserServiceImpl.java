@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.book.store.Repository.UserRepository;
 
-import javax.management.BadAttributeValueExpException;
 import java.util.*;
 
 @Service
@@ -18,16 +17,16 @@ public class UserServiceImpl implements UserService {
     @Autowired
     List<User> uList;
     @Autowired
-    UserRepository usrRepo;
+    UserRepository userRepository;
 
     Boolean nameAlreadyPresent = false;
 
     public List<User> getUsrList() {
-            return usrRepo.findAll();
+            return userRepository.findAll();
     }
     @Override
     public User getUsrByUserName(String userName) throws BadRequestException {
-            User user =  usrRepo.findByUserName(userName);
+            User user =  userRepository.findByUserName(userName);
             if(user == null){
                 throw new BadRequestException("Invalid username");
             }
@@ -37,7 +36,7 @@ public class UserServiceImpl implements UserService {
     public String addUser(User user) throws BadRequestException {
         String uName = user.getUserName();
         String errMessage = "The username " + uName + " is already present.";
-        for(User u: usrRepo.findAll()){
+        for(User u: userRepository.findAll()){
             if (u.getUserName().equalsIgnoreCase(uName)){
                 //nameAlreadyPresent = true;
                 return errMessage;
@@ -46,7 +45,7 @@ public class UserServiceImpl implements UserService {
         }
         //if(!nameAlreadyPresent){
             //System.out.println("name already present : " + nameAlreadyPresent);
-            usrRepo.save(user);
+            userRepository.save(user);
 //        }else{
 //            nameAlreadyPresent = false;
 //            System.out.println(errMessage);
@@ -61,15 +60,15 @@ public class UserServiceImpl implements UserService {
         Boolean err = false;
         String errMessage = currentUser + " cannot update " + userName +"'s record because either "
                 + currentUser + " is not an admin user or " + userName + "'s record doesn't exists";
-        User adminUser = usrRepo.findByUserName(currentUser);
-        User usr = usrRepo.findByUserName(userName);
+        User adminUser = userRepository.findByUserName(currentUser);
+        User usr = userRepository.findByUserName(userName);
         if(adminUser == null|| usr == null){
             System.out.println(errMessage);
             throw new BadRequestException(errMessage);
         }
         if(adminUser.getIsAdmin() || Objects.equals(userName, currentUser)){
                 user.setId(usr.getId());
-                usrRepo.save(user);
+                userRepository.save(user);
         }
         else{
             System.out.println(errMessage);
@@ -82,14 +81,14 @@ public class UserServiceImpl implements UserService {
     public String deleteUser(String userName, String currentUser) throws BadRequestException {
         String errMessage =  currentUser + " cannot delete " + userName +"'s record because either "
                 + currentUser + " is not an admin user or " + userName + "'s record doesn't exists";
-        User adminUser = usrRepo.findByUserName(currentUser);
-        User usr = usrRepo.findByUserName(userName);
-        if(usrRepo.findByUserName(currentUser) == null || usrRepo.findByUserName(userName) == null ){
+        User adminUser = userRepository.findByUserName(currentUser);
+        User usr = userRepository.findByUserName(userName);
+        if(userRepository.findByUserName(currentUser) == null || userRepository.findByUserName(userName) == null ){
             System.out.println(errMessage);
             throw new BadRequestException(errMessage);
         }
         else if(adminUser.getIsAdmin() || userName.equalsIgnoreCase(currentUser)){
-            this.usrRepo.deleteById(usr.getId());
+            this.userRepository.deleteById(usr.getId());
         }else{
             System.out.println(errMessage);
             throw new BadRequestException(errMessage);
