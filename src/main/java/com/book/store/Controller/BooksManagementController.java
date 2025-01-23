@@ -1,6 +1,7 @@
 package com.book.store.Controller;
 
 import com.book.store.models.domain.Books;
+import com.book.store.models.domain.Books_Purchase;
 import com.book.store.service.BooksManagementService;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class BooksManagementController {
         }
     }
 
-    @GetMapping("/books/{title}")
+    @GetMapping("/books/{title}") //Let's use by ID as well
     public ResponseEntity<Books> getBookByTitle(@PathVariable String title) throws BadRequestException {
         try{
             return new ResponseEntity<>(this.booksManagementService.getBookByTitle(title), HttpStatus.OK);
@@ -32,6 +33,7 @@ public class BooksManagementController {
             throw new BadRequestException(ex);
         }
     }
+
 
 
     @PostMapping("/books")
@@ -43,7 +45,7 @@ public class BooksManagementController {
         }
     }
 
-    @PutMapping("/books/{title}")
+    @PutMapping("/books/{title}")// Add by ID as well
     public ResponseEntity<String> updateBooks(@PathVariable String title, @RequestBody Books bk, @RequestHeader String currentUser) throws BadRequestException {
         try{
             return new ResponseEntity<>(this.booksManagementService.updateBooks(title,bk,currentUser), HttpStatus.OK);
@@ -52,7 +54,7 @@ public class BooksManagementController {
         }
     }
 
-    @DeleteMapping("/books/{title}")
+    @DeleteMapping("/books/{title}") // Add id as well
     public ResponseEntity<String> deleteBooks(@PathVariable String title, @RequestHeader String currentUser) throws BadRequestException {
         try{
             return new ResponseEntity<>(this.booksManagementService.deleteBooks(title,currentUser), HttpStatus.OK);
