@@ -60,14 +60,14 @@ public class UserServiceImpl implements UserService {
         Boolean err = false;
         String errMessage = currentUser + " cannot update " + userName +"'s record because either "
                 + currentUser + " is not an admin user or " + userName + "'s record doesn't exists";
-        User adminUser = userRepository.findByUserName(currentUser);
+        User adminUser = userRepository.findByUserName(currentUser);//REFINE by checking if the admin and user name match
         User usr = userRepository.findByUserName(userName);
         if(adminUser == null|| usr == null){
             System.out.println(errMessage);
             throw new BadRequestException(errMessage);
         }
-        if(adminUser.getIsAdmin() || Objects.equals(userName, currentUser)){
-                user.setId(usr.getId());
+        if(Objects.equals(userName, currentUser) || userRepository.findByUserName(currentUser).getIsAdmin()){
+                user.setId(usr.getId()); // REFINE because userid needs to be explicitly mentioned
                 userRepository.save(user);
         }
         else{
@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
             System.out.println(errMessage);
             throw new BadRequestException(errMessage);
         }
-        else if(adminUser.getIsAdmin() || userName.equalsIgnoreCase(currentUser)){
+        else if(userName.equalsIgnoreCase(currentUser) || userRepository.findByUserName(currentUser).getIsAdmin()){
             this.userRepository.deleteById(usr.getId());
         }else{
             System.out.println(errMessage);
