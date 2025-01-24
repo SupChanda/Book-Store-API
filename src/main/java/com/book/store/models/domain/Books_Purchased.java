@@ -27,16 +27,16 @@ public class Books_Purchased {
         @JoinColumn(name = "UserID", referencedColumnName = "ID", nullable = false)
         private User user;
 
-        @Column(name = "PurchasedDate",nullable = true)
+        @Column(name = "PurchasedDate")
         private Date purchasedDate;
 
         @Column(name = "TransactionType")
         private String transactionType;
 
-        @Column(name = "RentalStartDate",nullable = true)
+        @Column(name = "RentalStartDate")
         private Date rentalStartDate;
 
-        @Column(name = "RentalEndDate", nullable = true) // ADD return date
+        @Column(name = "RentalEndDate") // ADD return date
         private Date rentalEndDate;
 
         @Column(name = "Quantity")
