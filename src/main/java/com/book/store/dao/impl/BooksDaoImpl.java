@@ -1,5 +1,6 @@
 package com.book.store.dao.impl;
 
+import com.book.store.Repository.BooksRepository;
 import com.book.store.dao.BooksDao;
 import com.book.store.models.domain.Books;
 import com.book.store.models.domain.Books_Purchased;
@@ -9,6 +10,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import org.apache.coyote.BadRequestException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 
@@ -23,11 +25,16 @@ import java.util.Map;
 @Repository
 @Transactional
 public class BooksDaoImpl implements BooksDao {
+
+    @Autowired
+    BooksRepository booksRepository;
     @PersistenceContext
     private EntityManager entityManager;
     private final Date purchasedDate = Date.valueOf(LocalDate.now());
     private final Date rentalStartDate = Date.valueOf(LocalDate.now());
-    private final Date rentalEndDate = Date.valueOf(LocalDate.now());
+    private final Date rentalEndDate    = null ; //Date.valueOf(LocalDate.now());
+    private Query queryInsert;
+    private Query queryUpdate;
     private Query query;
     public BooksDaoImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
@@ -57,14 +64,20 @@ public class BooksDaoImpl implements BooksDao {
 
     public void addBookPurchasedOrRentDetails(int bookId,int userId,String transactionType,int quantity,float purchasedPrice,float rentalFeeAccrued) throws BadRequestException {
         try {
-            //entityManager.getTransaction().begin();
+            int noOfCopies = booksRepository.findById(bookId).get().getNoOfCopies();
             String insertBookRecordSql = "INSERT INTO Books_Purchased" +
                     "(BookID,UserID,TransactionType,PurchasedDate,RentalStartDate,RentalEndDate,Quantity,PurchasedPrice,RentalFeeAccrued) " +
                     "VALUES(?,?,?,?,?,?,?,?,?)";
-            query = entityManager.createNativeQuery(insertBookRecordSql);
-            setParameter(query,bookId,userId,transactionType,quantity,purchasedPrice,rentalFeeAccrued);
-            query.executeUpdate();
-            //entityManager.getTransaction().commit();
+            String UpdateBookRecordSql = "UPDATE Book_Record SET noOfCopies = :noOfCopies WHERE ID = :ID";
+
+            queryInsert = entityManager.createNativeQuery(insertBookRecordSql);
+            setParameter(queryInsert,bookId,userId,transactionType,quantity,purchasedPrice,rentalFeeAccrued);
+            queryInsert.executeUpdate();
+
+            queryUpdate = entityManager.createNativeQuery(UpdateBookRecordSql);
+            queryUpdate.setParameter("noOfCopies", noOfCopies- quantity);
+            queryUpdate.setParameter("ID", bookId);
+            queryUpdate.executeUpdate();
         }catch(Exception ex){
             throw new BadRequestException(ex.getMessage());
         }
