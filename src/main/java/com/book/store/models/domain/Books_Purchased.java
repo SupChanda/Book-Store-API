@@ -2,7 +2,6 @@ package com.book.store.models.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.FieldNameConstants;
 
 import java.util.Date;
 
@@ -13,7 +12,6 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@FieldNameConstants
 public class Books_Purchased {
 
         @Id
@@ -29,16 +27,16 @@ public class Books_Purchased {
         @JoinColumn(name = "UserID", referencedColumnName = "ID", nullable = false)
         private User user;
 
-        @Column(name = "PurchasedDate")
+        @Column(name = "PurchasedDate",nullable = true)
         private Date purchasedDate;
 
         @Column(name = "TransactionType")
         private String transactionType;
 
-        @Column(name = "RentalStartDate")
+        @Column(name = "RentalStartDate",nullable = true)
         private Date rentalStartDate;
 
-        @Column(name = "RentalEndDate") // ADD return date
+        @Column(name = "RentalEndDate", nullable = true) // ADD return date
         private Date rentalEndDate;
 
         @Column(name = "Quantity")

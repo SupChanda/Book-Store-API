@@ -33,7 +33,7 @@ public class BooksDaoImpl implements BooksDao {
     BooksRepository booksRepository;
     @PersistenceContext
     private EntityManager entityManager;
-    private Date purchasedDate = Date.valueOf(LocalDate.now());
+    private final Date purchasedDate = Date.valueOf(LocalDate.now());
     private Date rentalStartDate = Date.valueOf((LocalDate.now()));
     private final Date rentalEndDate    = Date.valueOf(LocalDate.now());
     Date today =  Date.valueOf(LocalDate.now());
