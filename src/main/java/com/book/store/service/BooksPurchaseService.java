@@ -9,4 +9,6 @@ import java.util.List;
 public interface BooksPurchaseService {
     List<Books_Purchased> getPurchasedBooksDetails() throws BadRequestException;
     String addBookPurchasedOrRentDetails(String title,String transactionType,int quantity,String currentUser) throws BadRequestException;
+
+    String UpdateBookDetailsOnReturn(int bookId, int userId) throws BadRequestException;
 }

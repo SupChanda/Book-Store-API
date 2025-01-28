@@ -2,6 +2,7 @@ package com.book.store.models.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldNameConstants;
 
 import java.util.Date;
 
@@ -12,6 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@FieldNameConstants
 public class Books_Purchased {
 
         @Id
