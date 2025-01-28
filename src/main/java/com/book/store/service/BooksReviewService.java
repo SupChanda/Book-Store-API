@@ -9,4 +9,5 @@ public interface BooksReviewService {
 
     Books_Review addBooksReview(int bookId, int userId, String comments) throws BadRequestException;
     List<Books_Review> getBooksReview() throws BadRequestException;
+    List<Books_Review> getBooksReviewByID(int bookId) throws  BadRequestException;
 }
