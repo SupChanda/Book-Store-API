@@ -5,10 +5,7 @@ import com.book.store.service.BooksReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,6 +18,14 @@ public class BooksReviewController {
     public ResponseEntity<Object> getBooksReview(){
         try{
             return new ResponseEntity<>(this.booksReviewService.getBooksReview(), HttpStatus.OK);
+        }catch(Exception ex){
+            return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+    @GetMapping("/books-reviews/{bookId}")
+    public ResponseEntity<Object> getBooksReviewByID(@PathVariable int bookId){
+        try{
+            return new ResponseEntity<>(this.booksReviewService.getBooksReviewByID(bookId), HttpStatus.OK);
         }catch(Exception ex){
             return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
         }

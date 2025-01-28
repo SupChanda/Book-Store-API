@@ -33,4 +33,13 @@ public class BooksReviewServiceImpl implements BooksReviewService {
             throw new BadRequestException(ex.getMessage());
         }
     }
+
+    @Override
+    public List<Books_Review> getBooksReviewByID(int bookId) throws BadRequestException {
+        try{
+            return booksReviewDao.getBooksReviewById(bookId);
+        }catch(Exception ex){
+            throw new BadRequestException(ex.getMessage());
+        }
+    }
 }

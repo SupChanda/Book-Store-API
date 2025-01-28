@@ -26,6 +26,14 @@ public class BooksReviewDaoImpl implements BooksReviewDao {
         return query.getResultList();
     }
 
+    public List<Books_Review> getBooksReviewById(int bookId){
+        String resultSet = "SELECT * FROM Books_Review WHERE BookID =:bookId";
+        query = entityManager.createNativeQuery(resultSet, Books_Review.class);
+        query.setParameter("bookId",bookId);
+        return query.getResultList();
+
+    }
+
     @Override
     public Books_Review addBookReview(int bookId, int userId, Date dateReviewed, String comments) throws BadRequestException {
         System.out.println("Here 0");
