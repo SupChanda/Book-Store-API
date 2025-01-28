@@ -32,7 +32,18 @@ public class BooksPurchaseController {
         try{
             return new ResponseEntity<>(this.booksPurchaseService.addBookPurchasedOrRentDetails(title,transactionType,quantity,currentUser), HttpStatus.OK);
         }catch(Exception ex){
-            throw new BadRequestException(ex.getMessage());
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/return/books-transaction/{bookId}")
+    public ResponseEntity<String> UpdateBookDetailsOnReturn(
+            @PathVariable      int bookId
+            ,@RequestHeader     int userId) throws BadRequestException {
+        try{
+            return new ResponseEntity<>(this.booksPurchaseService.UpdateBookDetailsOnReturn(bookId,userId), HttpStatus.OK);
+        }catch(Exception ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }

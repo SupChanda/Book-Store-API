@@ -13,9 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.*;
-import java.sql.Date;
+
 @Service
 @Transactional(propagation = Propagation.REQUIRES_NEW)
 public class BooksPurchaseServiceImpl implements BooksPurchaseService {
@@ -60,9 +59,20 @@ public class BooksPurchaseServiceImpl implements BooksPurchaseService {
 
         }
         catch (Exception ex){
+            throw new BadRequestException(currentUser + ex.getMessage());
+        }
+        return  currentUser + " has " + transactionType + " the book '" + title + "'";
+    }
+
+    @Override
+    public String UpdateBookDetailsOnReturn(int bookId, int userId) throws BadRequestException {
+        try{
+            booksDao.UpdateBookDetailsOnReturn(bookId,userId);
+        }
+        catch (Exception ex){
             return ex.getMessage();
         }
-        return " The record is updated";
+        return "Book Id " + bookId + " is returned";
     }
 
 }

@@ -31,6 +31,9 @@ public class User {
     @Column(name = "LastName")
     private String lastName;
 
+    @Column(name = "IsActiveMember")
+    private Boolean isActiveMember;
+
     @Column(name = "IsAdmin")
     private Boolean isAdmin;
 
