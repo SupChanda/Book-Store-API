@@ -1,33 +1,25 @@
 package com.book.store.dao.impl;
 
 import com.book.store.Repository.BooksRepository;
-import com.book.store.dao.BooksDao;
-import com.book.store.models.domain.Books;
+import com.book.store.dao.BooksPurchaseDao;
 import com.book.store.models.domain.Books_Purchased;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.Id;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
 
-import java.awt.print.Book;
-import java.sql.Array;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Repository
 @Transactional
-public class BooksDaoImpl implements BooksDao {
+public class BooksPurchaseDaoImpl implements BooksPurchaseDao {
 
     @Autowired
     BooksRepository booksRepository;
@@ -40,7 +32,7 @@ public class BooksDaoImpl implements BooksDao {
     private Query queryInsert;
     private Query queryUpdate;
     private Query query;
-    public BooksDaoImpl(EntityManager entityManager) {
+    public BooksPurchaseDaoImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
     public void setParameter(Query query, int bookId,int userId,String transactionType,int quantity,float purchasedPrice,float rentalFeeAccrued){
@@ -67,23 +59,31 @@ public class BooksDaoImpl implements BooksDao {
 
     public void addBookPurchasedOrRentDetails(int bookId,int userId,String transactionType,int quantity,float purchasedPrice,float rentalFeeAccrued) throws BadRequestException {
         try {
-
+            //CHECK HOW MANY BOOKS ARE LEFT
+            String bookRemainingQuery = "SELECT NoOfCopies,Title FROM Book_Record WHERE ID = :bookId";
+            query = entityManager.createNativeQuery(bookRemainingQuery);
+            query.setParameter("bookId", bookId);
+            Object[] result = (Object[]) query.getSingleResult();
+            if((int) result[0] == 0){
+                String BookTitle = (String) result[1];
+                throw new BadRequestException(" , unfortunately there are no '"+ BookTitle + "' books are left");
+            }
             //Checking whether the member has already rented 2 books
-
-            String quantityCheckQuery = "SELECT SUM(Quantity) FROM Books_Purchased WHERE UserId = :userId"; //totalBookRentedQueryString
-            int quantityCheck = 0;
-            query = entityManager.createNativeQuery(quantityCheckQuery);
-            query.setParameter("userId",userId);
-            if(query.getSingleResult()==null) {
-                quantityCheck = 0;
-            }else{
-                quantityCheck = (int) query.getSingleResult();
+            if(transactionType.equalsIgnoreCase("Rented")) {
+                String quantityCheckQuery = "SELECT SUM(Quantity) FROM Books_Purchased WHERE UserId = :userId"; //totalBookRentedQueryString
+                int quantityCheck = 0;
+                query = entityManager.createNativeQuery(quantityCheckQuery);
+                query.setParameter("userId", userId);
+                if (query.getSingleResult() == null) {
+                    quantityCheck = 0;
+                } else {
+                    quantityCheck = (int) query.getSingleResult();
+                }
+                System.out.println("quantityCheck" + quantityCheck);
+                if (quantityCheck > 1) {
+                    throw new BadRequestException(" can only rent 2 books at a time");
+                }
             }
-            System.out.println("quantityCheck" + quantityCheck);
-            if(quantityCheck > 1){
-                throw new BadRequestException(" can only rent 2 books at a time");
-            }
-
             //Checking whether the user has active membership
 
             String isActiveMember = "SELECT DISTINCT(IsActiveMember) FROM Book_User WHERE ID = :userId"; //totalBookRentedQueryString

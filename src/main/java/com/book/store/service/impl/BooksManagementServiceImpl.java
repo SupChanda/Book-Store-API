@@ -2,9 +2,7 @@ package com.book.store.service.impl;
 
 import com.book.store.Repository.BooksRepository;
 import com.book.store.Repository.UserRepository;
-import com.book.store.dao.BooksDao;
 import com.book.store.models.domain.Books;
-import com.book.store.models.domain.Books_Purchased;
 import com.book.store.models.domain.User;
 import com.book.store.service.BooksManagementService;
 import jakarta.transaction.Transactional;
@@ -12,7 +10,6 @@ import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
