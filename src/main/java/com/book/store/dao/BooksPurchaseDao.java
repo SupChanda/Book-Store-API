@@ -5,7 +5,7 @@ import org.apache.coyote.BadRequestException;
 
 import java.util.List;
 
-public interface BooksDao {
+public interface BooksPurchaseDao {
 
     List<Books_Purchased> getAllPurchasedBooksDetails();
     void addBookPurchasedOrRentDetails(int bookId,int userId,String transactionType,int quantity,float purchasedPrice,float rentalFeeAccrued) throws BadRequestException;

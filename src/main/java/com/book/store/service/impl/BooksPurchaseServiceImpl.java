@@ -2,7 +2,7 @@ package com.book.store.service.impl;
 
 import com.book.store.Repository.BooksRepository;
 import com.book.store.Repository.UserRepository;
-import com.book.store.dao.BooksDao;
+import com.book.store.dao.BooksPurchaseDao;
 import com.book.store.models.domain.Books;
 import com.book.store.models.domain.Books_Purchased;
 import com.book.store.models.domain.User;
@@ -29,7 +29,7 @@ public class BooksPurchaseServiceImpl implements BooksPurchaseService {
 
 
     @Autowired
-    BooksDao booksDao;
+    BooksPurchaseDao booksPurchaseDao;
     @Autowired
     BooksRepository booksRepository;
     @Autowired
@@ -38,7 +38,7 @@ public class BooksPurchaseServiceImpl implements BooksPurchaseService {
     @Override
     public List<Books_Purchased> getPurchasedBooksDetails() throws BadRequestException {
         try{
-            return booksDao.getAllPurchasedBooksDetails();
+            return booksPurchaseDao.getAllPurchasedBooksDetails();
         }catch(Exception ex){
             throw new BadRequestException(ex.getMessage());
         }
@@ -55,7 +55,7 @@ public class BooksPurchaseServiceImpl implements BooksPurchaseService {
             purchasedPrice = book.getPrice();
             rentalFeeAccrued = book.getRentalFee();
 
-            booksDao.addBookPurchasedOrRentDetails(bookId,userId,transactionType,quantity,purchasedPrice,rentalFeeAccrued);
+            booksPurchaseDao.addBookPurchasedOrRentDetails(bookId,userId,transactionType,quantity,purchasedPrice,rentalFeeAccrued);
 
         }
         catch (Exception ex){
@@ -67,7 +67,7 @@ public class BooksPurchaseServiceImpl implements BooksPurchaseService {
     @Override
     public String UpdateBookDetailsOnReturn(int bookId, int userId) throws BadRequestException {
         try{
-            booksDao.UpdateBookDetailsOnReturn(bookId,userId);
+            booksPurchaseDao.UpdateBookDetailsOnReturn(bookId,userId);
         }
         catch (Exception ex){
             return ex.getMessage();
