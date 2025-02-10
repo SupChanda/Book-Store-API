@@ -3,6 +3,7 @@ package com.book.store.Controller;
 import com.book.store.models.domain.Books;
 //import com.book.store.models.domain.Books_Purchased;
 import com.book.store.service.BooksManagementService;
+import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,9 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class BooksManagementController {
 
-    @Autowired
+    //@Autowired
     BooksManagementService booksManagementService;
     @GetMapping("/books")
     public ResponseEntity<List<Books>> getBooks() throws BadRequestException {

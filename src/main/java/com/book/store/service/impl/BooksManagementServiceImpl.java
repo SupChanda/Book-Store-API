@@ -2,8 +2,8 @@ package com.book.store.service.impl;
 
 import com.book.store.Repository.BooksRepository;
 import com.book.store.Repository.UserRepository;
+import com.book.store.models.domain.BookUser;
 import com.book.store.models.domain.Books;
-import com.book.store.models.domain.User;
 import com.book.store.service.BooksManagementService;
 import jakarta.transaction.Transactional;
 import org.apache.coyote.BadRequestException;
@@ -45,7 +45,7 @@ public class BooksManagementServiceImpl implements BooksManagementService {
     @Override
     public String createBooks(Books books,String currentUser){
         String bTitle = books.getTitle();
-        User uName = this.userRepository.findByUserName(currentUser);
+        BookUser uName = this.userRepository.findByUserName(currentUser);
         String errMessage = err4 + bTitle + " is already present.";
         if(uName.getIsAdmin()){
             for(Books b: booksRepository.findAll()){
@@ -66,7 +66,7 @@ public class BooksManagementServiceImpl implements BooksManagementService {
     @Override
     public String updateBooks(String title,Books books,String currentUser){
         String bk_Title = books.getTitle();
-        User uName = this.userRepository.findByUserName(currentUser);
+        BookUser uName = this.userRepository.findByUserName(currentUser);
         String errMessage = err4 + title + err5;
         System.out.println("bkRepo.findByTitle(title) " + booksRepository.findByTitle(title));
         if(booksRepository.findByTitle(title)== null){
@@ -93,7 +93,7 @@ public class BooksManagementServiceImpl implements BooksManagementService {
     @Override
     public String deleteBooks(String title,String currentUser){
         Books bk = booksRepository.findByTitle(title);
-        User uName = this.userRepository.findByUserName(currentUser);
+        BookUser uName = this.userRepository.findByUserName(currentUser);
         Books bookToBeDeleted = new Books();
         if(bk == null){
             return "The book titled '" + title + "' passed in the url " + err5;

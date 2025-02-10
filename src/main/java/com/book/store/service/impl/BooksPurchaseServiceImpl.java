@@ -4,8 +4,8 @@ import com.book.store.Repository.BooksRepository;
 import com.book.store.Repository.UserRepository;
 import com.book.store.dao.BooksPurchaseDao;
 import com.book.store.models.domain.Books;
-import com.book.store.models.domain.Books_Purchased;
-import com.book.store.models.domain.User;
+import com.book.store.models.domain.BooksPurchased;
+import com.book.store.models.domain.BookUser;
 import com.book.store.service.BooksPurchaseService;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class BooksPurchaseServiceImpl implements BooksPurchaseService {
     UserRepository userRepository;
 
     @Override
-    public List<Books_Purchased> getPurchasedBooksDetails() throws BadRequestException {
+    public List<BooksPurchased> getPurchasedBooksDetails() throws BadRequestException {
         try{
             return booksPurchaseDao.getAllPurchasedBooksDetails();
         }catch(Exception ex){
@@ -49,7 +49,7 @@ public class BooksPurchaseServiceImpl implements BooksPurchaseService {
     public String addBookPurchasedOrRentDetails(String title,String transactionType,int quantity,String currentUser) throws BadRequestException {
         try{
             Books book = booksRepository.findByTitle(title);
-            User user = userRepository.findByUserName(currentUser);
+            BookUser user = userRepository.findByUserName(currentUser);
             bookId = book.getId();
             userId = user.getId();
             purchasedPrice = book.getPrice();

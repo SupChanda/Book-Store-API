@@ -1,16 +1,15 @@
-package com.book.store.models.dto;
+package com.book.store.models.contract;
 
-import jakarta.persistence.*;
+
 import lombok.*;
 import lombok.experimental.FieldNameConstants;
-import org.springframework.stereotype.Component;
 
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @FieldNameConstants
-public class UserDTO {
+public class UserRequest {
 
     private Integer id;
 

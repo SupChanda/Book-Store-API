@@ -1,17 +1,16 @@
 package com.book.store.Controller;
 
-import com.book.store.models.domain.Books_Review;
 import com.book.store.service.BooksReviewService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
+@RequiredArgsConstructor
 public class BooksReviewController {
-    @Autowired
+    //@Autowired
     BooksReviewService booksReviewService;
 
     @GetMapping("/books-reviews")
