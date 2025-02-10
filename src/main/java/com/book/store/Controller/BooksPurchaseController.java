@@ -1,8 +1,8 @@
 package com.book.store.Controller;
 
-import com.book.store.models.domain.Books;
-import com.book.store.models.domain.Books_Purchased;
+import com.book.store.models.domain.BooksPurchased;
 import com.book.store.service.BooksPurchaseService;
+import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 @RestController
+@RequiredArgsConstructor
 public class BooksPurchaseController {
 
-    @Autowired
+    //@Autowired
     BooksPurchaseService booksPurchaseService;
     @GetMapping("/books-transaction")
-    public ResponseEntity<List<Books_Purchased>> getPurchasedBooksDetails() throws BadRequestException {
+    public ResponseEntity<List<BooksPurchased>> getPurchasedBooksDetails() throws BadRequestException {//TO DO: Delete the underscore
         try{
             return new ResponseEntity<>(this.booksPurchaseService.getPurchasedBooksDetails(), HttpStatus.OK);
         }catch(Exception ex){
@@ -25,7 +26,7 @@ public class BooksPurchaseController {
     }
     @PostMapping("/books-transaction")
     public ResponseEntity<String> addBookPurchasedOrRentDetails(
-                                        @RequestHeader      String  title
+                                        @RequestHeader      String  title // BETTER TO DO USING ID
                                         ,@RequestHeader     String transactionType
                                         ,@RequestHeader     int quantity
                                         ,@RequestHeader     String currentUser) throws BadRequestException {

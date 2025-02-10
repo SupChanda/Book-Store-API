@@ -2,14 +2,12 @@ package com.book.store.dao.impl;
 
 import com.book.store.dao.BooksRecommendationDao;
 import com.book.store.models.domain.Books;
-import com.book.store.models.domain.Books_Review;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Repository;
 
-import java.awt.print.Book;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

@@ -1,8 +1,7 @@
 package com.book.store.dao.impl;
 
 import com.book.store.dao.BooksReviewDao;
-import com.book.store.models.domain.Books_Purchased;
-import com.book.store.models.domain.Books_Review;
+import com.book.store.models.domain.BooksReview;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
@@ -20,22 +19,22 @@ public class BooksReviewDaoImpl implements BooksReviewDao {
     private EntityManager entityManager;
     private Query query;
     @Override
-    public List<Books_Review> getBooksReview(){
+    public List<BooksReview> getBooksReview(){
         String resultSet = "SELECT * FROM Books_Review";
-        query = entityManager.createNativeQuery(resultSet, Books_Review.class);
+        query = entityManager.createNativeQuery(resultSet, BooksReview.class);
         return query.getResultList();
     }
 
-    public List<Books_Review> getBooksReviewById(int bookId){
+    public List<BooksReview> getBooksReviewById(int bookId){
         String resultSet = "SELECT * FROM Books_Review WHERE BookID =:bookId";
-        query = entityManager.createNativeQuery(resultSet, Books_Review.class);
+        query = entityManager.createNativeQuery(resultSet, BooksReview.class);
         query.setParameter("bookId",bookId);
         return query.getResultList();
 
     }
 
     @Override
-    public Books_Review addBookReview(int bookId, int userId, Date dateReviewed, String comments) throws BadRequestException {
+    public BooksReview addBookReview(int bookId, int userId, Date dateReviewed, String comments) throws BadRequestException {
         System.out.println("Here 0");
         //CHECK IF THE PERSON HAVE PURCHASED OR RENTED THE BOOK
         String checkBookAndUserIDBeforeReviewing = "SELECT COUNT(*) FROM Books_Purchased WHERE BookID = :bookId AND UserID = :userId";
@@ -67,11 +66,11 @@ public class BooksReviewDaoImpl implements BooksReviewDao {
 
         //System.out.println("Here 3");
         String resultSet = "SELECT * FROM Books_Review WHERE BookID = :bookId AND UserID = :userId";
-        query = entityManager.createNativeQuery(resultSet, Books_Review.class);
+        query = entityManager.createNativeQuery(resultSet, BooksReview.class);
         query.setParameter("bookId",bookId);
         query.setParameter("userId",userId);
 
-        return (Books_Review) query.getSingleResult();
+        return (BooksReview) query.getSingleResult();
 
 
     }

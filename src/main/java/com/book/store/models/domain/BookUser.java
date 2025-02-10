@@ -2,17 +2,19 @@ package com.book.store.models.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldNameConstants;
 import org.springframework.stereotype.Component;
 
 @Entity
-@Table(name = "Book_User")
+@Table(name = "BookUser")
 @Component
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Getter
 @Setter
-public class User {
+@FieldNameConstants
+public class BookUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldNameConstants;
 
-import javax.naming.Name;
 import java.util.Date;
 
 @Entity
@@ -15,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 @FieldNameConstants
-public class Books_Review {
+public class BooksReview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
@@ -27,7 +26,7 @@ public class Books_Review {
 
     @ManyToOne
     @JoinColumn(name = "UserID", referencedColumnName = "ID", nullable = false)
-    private User user;
+    private BookUser user;
 
     @Column(name = "DateReviewed")
     private Date dateReviewed;

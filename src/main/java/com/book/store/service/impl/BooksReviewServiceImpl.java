@@ -1,7 +1,7 @@
 package com.book.store.service.impl;
 
 import com.book.store.dao.BooksReviewDao;
-import com.book.store.models.domain.Books_Review;
+import com.book.store.models.domain.BooksReview;
 import com.book.store.service.BooksReviewService;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class BooksReviewServiceImpl implements BooksReviewService {
     BooksReviewDao booksReviewDao;
     private final Date dateReviewed = Date.valueOf(LocalDate.now());
     @Override
-    public Books_Review addBooksReview(int bookId, int userId, String comments) throws BadRequestException {
+    public BooksReview addBooksReview(int bookId, int userId, String comments) throws BadRequestException {
         try{
             return booksReviewDao.addBookReview(bookId,userId,dateReviewed, comments);
         }catch(Exception ex){
@@ -26,7 +26,7 @@ public class BooksReviewServiceImpl implements BooksReviewService {
     }
 
     @Override
-    public List<Books_Review> getBooksReview() throws BadRequestException {
+    public List<BooksReview> getBooksReview() throws BadRequestException {
         try{
             return booksReviewDao.getBooksReview();
         }catch(Exception ex){
@@ -35,7 +35,7 @@ public class BooksReviewServiceImpl implements BooksReviewService {
     }
 
     @Override
-    public List<Books_Review> getBooksReviewByID(int bookId) throws BadRequestException {
+    public List<BooksReview> getBooksReviewByID(int bookId) throws BadRequestException {
         try{
             return booksReviewDao.getBooksReviewById(bookId);
         }catch(Exception ex){

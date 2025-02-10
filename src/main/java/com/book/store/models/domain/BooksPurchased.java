@@ -12,7 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Books_Purchased {
+public class BooksPurchased {
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,7 @@ public class Books_Purchased {
 
         @ManyToOne
         @JoinColumn(name = "UserID", referencedColumnName = "ID", nullable = false)
-        private User user;
+        private BookUser user;
 
         @Column(name = "PurchasedDate",nullable = true)
         private Date purchasedDate;
