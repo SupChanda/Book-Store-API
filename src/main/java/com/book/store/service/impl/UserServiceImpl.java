@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
 
 
             if (adminUserFound == null){
-                throw new BadRequestException("Invalid Admin user "+ currentUser + "!" );
+                throw new BadRequestException("Invalid Admin user: "+ currentUser + "!" );
             }else if (userNameFound.getId().equals(adminUserFound.getId()) || adminUserFound.getIsAdmin()) {
                 System.out.println("Is current user admin? : " + adminUserFound.getIsAdmin());
                 userDao.updateUser(userId, userRequest);
