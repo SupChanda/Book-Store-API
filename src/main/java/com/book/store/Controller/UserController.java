@@ -39,7 +39,6 @@ public class UserController {
         List<BookUser> user = this.userService.getUsrList();
         List<UserDTO> userDTO = this.userMapper.userToDTOList(user);
         return userDTO;
-        //return this.userService.getUsrList();
     }
 
     @GetMapping("/user/name/{userName}") // TO DO : Add userid as well
@@ -48,8 +47,6 @@ public class UserController {
             UserDTO userDTO = userMapper.toDTO((BookUser) this.userService.getUsrByUserName(userName));
             //System.out.println("in controller try");
             return new ResponseEntity<>(userDTO,HttpStatus.OK);
-            //BookUser user = this.userService.getUsrByUserName(userName);
-            //return new ResponseEntity<>(this.userMapper.toDTO(userDTO),HttpStatus.OK);
             //return this.userService.getUsrByUserName(userName);
         }catch(Exception ex){
             //System.out.println("catch Controller:" + ex.getMessage());
@@ -80,7 +77,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/user") //TO DO : header implementation to check whether  the user is admin or user himself
+    @PutMapping("/user")
     public ResponseEntity<String> updateUser(@RequestBody UserDTO userDTO, @RequestHeader String currentUser) throws BadRequestException { // TO DO : Validation if the user exists , else throw an exception
         try{
             UserRequest userRequest = userMapper.toUserRequest(userDTO);
@@ -92,6 +89,24 @@ public class UserController {
             return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
+
+
+    @DeleteMapping("/user/{userId}")
+    public ResponseEntity<String> deleteUser(@PathVariable int userId,@RequestHeader String currentUser) throws BadRequestException { // TO DO : Validation if the user exists , else throw an exception
+        try{
+            return new ResponseEntity<>(this.userService.deleteUser(userId,currentUser),HttpStatus.OK);
+        }catch (Exception ex){
+            //System.out.println(ex.getMessage());
+            return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+
+}
+
+
+
 //    @PutMapping("/user/{userName}") //TO DO : header implementation to check whether  the user is admin or user himself
 //    public ResponseEntity<String> updateUser(@PathVariable String userName, @RequestBody UserDTO userDTO, @RequestHeader String currentUser) throws BadRequestException { // TO DO : Validation if the user exists , else throw an exception
 //        try{
@@ -104,17 +119,3 @@ public class UserController {
 //            return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
 //        }
 //    }
-
-    @DeleteMapping("/user/{userName}")
-    public ResponseEntity<String> deleteUser(@PathVariable String userName,@RequestHeader String currentUser) throws BadRequestException { // TO DO : Validation if the user exists , else throw an exception
-        try{
-            return new ResponseEntity<>(this.userService.deleteUser(userName,currentUser),HttpStatus.OK);
-        }catch (Exception ex){
-            //System.out.println(ex.getMessage());
-            throw new BadRequestException(ex.getMessage());
-        }
-
-    }
-
-
-}

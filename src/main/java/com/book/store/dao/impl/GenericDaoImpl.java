@@ -30,7 +30,7 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 //        session.clear();
     }
     @Override
-    public void update(String queryString, Map<String,Object> queryParams ){
+    public void updateOrDeleteUser(String queryString, Map<String,Object> queryParams ){
 
         Transaction transaction = null;
         transaction = getSession().beginTransaction();
@@ -38,9 +38,9 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
         String finalQueryString = queryString;
         for (Map.Entry<String, Object> queryLoop : queryParams.entrySet()) {
             query.setParameter(queryLoop.getKey(), queryLoop.getValue());
-            finalQueryString = finalQueryString.replace(":" + queryLoop.getKey(), queryLoop.getValue().toString());
+           // finalQueryString = finalQueryString.replace(":" + queryLoop.getKey(), queryLoop.getValue().toString());
         }
-        System.out.println("query " + finalQueryString);
+        //System.out.println("query " + finalQueryString);
         query.executeUpdate();
         transaction.commit();
 
@@ -69,6 +69,8 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 //        System.out.println(query.getSingleResult());
         return (Long) query.getSingleResult();
     }
+
+
 
 
 }

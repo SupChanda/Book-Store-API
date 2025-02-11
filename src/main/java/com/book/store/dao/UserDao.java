@@ -11,4 +11,6 @@ public interface UserDao {
     void updateUser(Integer userId, UserRequest userRequest) throws BadRequestException;
     Object getUsrByUserName(String userName) throws BadRequestException;
     Object getUsrByUserId(Integer userId) throws BadRequestException;
+
+    void deleteUser(Integer userId, String currentUser) throws BadRequestException;
 }

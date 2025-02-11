@@ -22,5 +22,5 @@ public interface UserService {
     Object getUsrByUserId(Integer userId) throws BadRequestException;
     String addUser(UserRequest userRequest) throws BadRequestException;
     String updateUser(UserRequest userRequest, String currentUser) throws BadRequestException;
-    String deleteUser(String UserName,String currentUser) throws BadRequestException;
+    String deleteUser(int userId,String currentUser) throws BadRequestException;
 }
