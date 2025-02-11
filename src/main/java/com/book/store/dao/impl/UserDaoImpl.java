@@ -26,6 +26,7 @@ public class UserDaoImpl extends GenericDaoImpl<BookUser> implements UserDao {
     private final String updateQueryTemplate = "UPDATE ${User} b SET b.${userName} = :userName, " +
             "b.${password} = :password, b.${firstName} = :firstName, b.${lastName} = :lastName, " +
             "b.${isActiveMember} = :isActiveMember, b.${isAdmin} = :isAdmin WHERE b.${id} = :userId";
+   private final String deleteQueryTemplate = "DELETE " + queryTemplateByUserId;
 
     @Override
     public Object getUsrByUserName(String userName) throws BadRequestException {
@@ -41,7 +42,7 @@ public class UserDaoImpl extends GenericDaoImpl<BookUser> implements UserDao {
         //System.out.println("queryString: " + queryString);
         if(getHQLQueryCount(queryString,queryParams) == 0){
             //System.out.println(" In DAO Impl catch");
-            throw new BadRequestException("User: " + userName + " is Invalid!");
+            throw new BadRequestException("Invalid UserName: " + userName);
         }
         //System.out.println("yes in DAO");
         //System.out.println("getHQLSingleQueryResultSet:  " + getHQLSingleQueryResultSet(queryString,queryParams));
@@ -62,17 +63,19 @@ public class UserDaoImpl extends GenericDaoImpl<BookUser> implements UserDao {
         //System.out.println("queryString: " + queryString);
         if(getHQLQueryCount(queryString,queryParams) == 0){
             //System.out.println(" In DAO Impl catch");
-            throw new BadRequestException("UserID: " + userId + " is Invalid!");
+            throw new BadRequestException("Invalid UserID: " + userId);
         }
         //System.out.println("yes in DAO");
         //System.out.println("getHQLSingleQueryResultSet:  " + getHQLSingleQueryResultSet(queryString,queryParams));
         return getHQLSingleQueryResultSet(queryString,queryParams);
 
     }
+
+
+
     @Override
     public boolean addUser(String userName, UserRequest userRequest) {
         //System.out.println("Yes Here");
-            //queryTemplate = "FROM ${User} WHERE ${userName} = :userName";//${User} is a placeholder
             Map<String, Object> templateValues = new HashMap<>();
             templateValues.put("User", BookUser.class.getName());
             templateValues.put("userName", BookUser.Fields.userName);
@@ -118,9 +121,23 @@ public class UserDaoImpl extends GenericDaoImpl<BookUser> implements UserDao {
         queryParams.put("isAdmin",userRequest.getIsAdmin());
         queryParams.put("userId",userId);
 
-        update(queryString,queryParams);
+        updateOrDeleteUser(queryString,queryParams);
 
     }
 
+    @Override
+    public void deleteUser(Integer userId, String currentUser) throws BadRequestException {
+        //private final String deleteQueryTemplate = "DELETE FROM ${User} b WHERE b.${id} = :userId";
+        Map<String, Object> templateValues = new HashMap<>();
+        templateValues.put("User", BookUser.class.getName());
+        templateValues.put("id", BookUser.Fields.id);
+
+        queryString = generateQueryString(deleteQueryTemplate,templateValues);
+
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("userId", userId);
+
+        updateOrDeleteUser(queryString,queryParams);
+    }
 
 }

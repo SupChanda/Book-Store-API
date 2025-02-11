@@ -92,12 +92,12 @@ public class UserServiceImpl implements UserService {
             int userId = userRequest.getId();
 
             UserDTO adminUserFound = userMapper.toDTO((BookUser) userDao.getUsrByUserName(currentUser));
-            UserDTO userNameFound = userMapper.toDTO((BookUser) userDao.getUsrByUserName(userName));
+            UserDTO userNameFound = userMapper.toDTO((BookUser) userDao.getUsrByUserId(userId));
 
 
             if (adminUserFound == null){
-                throw new BadRequestException("Invalid Admin user "+ currentUser + "!" );
-            }else if (Objects.equals(userNameFound, adminUserFound) || adminUserFound.getIsAdmin()) {
+                throw new BadRequestException("Invalid Admin user: "+ currentUser + "!" );
+            }else if (userNameFound.getId().equals(adminUserFound.getId()) || adminUserFound.getIsAdmin()) {
                 System.out.println("Is current user admin? : " + adminUserFound.getIsAdmin());
                 userDao.updateUser(userId, userRequest);
                 return currentUser + " updated " + userName + " record";
@@ -111,21 +111,39 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String deleteUser(String userName, String currentUser) throws BadRequestException {
-        String errMessage =  currentUser + " cannot delete " + userName +"'s record because either "
-                + currentUser + " is not an admin user or " + userName + "'s record doesn't exists";
-        BookUser adminUser = userRepository.findByUserName(currentUser);
-        BookUser usr = userRepository.findByUserName(userName);
-        if(userRepository.findByUserName(currentUser) == null || userRepository.findByUserName(userName) == null ){
-            System.out.println(errMessage);
-            throw new BadRequestException(errMessage);
+    public String deleteUser(int userId, String currentUser) throws BadRequestException {
+        try {
+            Integer userIdFound = userMapper.toDTO((BookUser) userDao.getUsrByUserId(userId)).getId();
+            UserDTO isAdminUser = userMapper.toDTO((BookUser) userDao.getUsrByUserName(currentUser));
+            if(isAdminUser.getId().equals(userIdFound)){
+                userDao.deleteUser(userId, currentUser);
+                return "User ID : " + userId + " has been deleted";
+            }
+            else if (userIdFound == null) {
+                throw new BadRequestException("Invalid userId: " + userId);
+            } else if (!isAdminUser.getIsAdmin()) {
+                throw new BadRequestException(currentUser + " is not an admin user!");
+            }else {
+                throw new BadRequestException(currentUser + " ,you cannot delete userId: " + userId);
+            }
+        }catch(Exception ex){
+            throw new BadRequestException(ex.getMessage());
         }
-        else if(userName.equalsIgnoreCase(currentUser) || userRepository.findByUserName(currentUser).getIsAdmin()){
-            this.userRepository.deleteById(usr.getId());
-        }else{
-            System.out.println(errMessage);
-            throw new BadRequestException(errMessage);
-        }
-        return currentUser + " deleted " + userName + "'s record";
+
+//        String errMessage =  currentUser + " cannot delete " + userName +"'s record because either "
+//                + currentUser + " is not an admin user or " + userName + "'s record doesn't exists";
+//        BookUser adminUser = userRepository.findByUserName(currentUser);
+//        BookUser usr = userRepository.findByUserName(userName);
+//        if(userRepository.findByUserName(currentUser) == null || userRepository.findByUserName(userName) == null ){
+//            System.out.println(errMessage);
+//            throw new BadRequestException(errMessage);
+//        }
+//        else if(userName.equalsIgnoreCase(currentUser) || userRepository.findByUserName(currentUser).getIsAdmin()){
+//            this.userRepository.deleteById(usr.getId());
+//        }else{
+//            System.out.println(errMessage);
+//            throw new BadRequestException(errMessage);
+//        }
+//        return currentUser + " deleted " + userName + "'s record";
     }
 }
