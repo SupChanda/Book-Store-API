@@ -2,6 +2,7 @@ package com.book.store.Controller;
 
 import com.book.store.models.domain.Books;
 //import com.book.store.models.domain.Books_Purchased;
+import com.book.store.models.dto.BooksDTO;
 import com.book.store.service.BooksManagementService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
@@ -16,14 +17,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BooksManagementController {
 
-    //@Autowired
+    @Autowired
     BooksManagementService booksManagementService;
     @GetMapping("/books")
-    public ResponseEntity<List<Books>> getBooks() throws BadRequestException {
+    public ResponseEntity<Object> getBooks() throws BadRequestException {
         try{
             return new ResponseEntity<>(this.booksManagementService.getBooks(), HttpStatus.OK);
         }catch(Exception ex){
-            throw new BadRequestException(ex.getMessage());
+            return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 

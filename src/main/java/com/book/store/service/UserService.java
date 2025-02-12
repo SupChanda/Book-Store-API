@@ -2,13 +2,7 @@ package com.book.store.service;
 
 import com.book.store.models.contract.UserRequest;
 import com.book.store.models.domain.BookUser;
-//import com.book.store.models.domain.User;
-import com.book.store.models.dto.BooksDTO;
-import com.book.store.models.dto.UserDTO;
 import org.apache.coyote.BadRequestException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.ArrayList;
 import java.util.Arrays;

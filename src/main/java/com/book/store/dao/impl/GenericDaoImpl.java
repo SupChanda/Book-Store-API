@@ -52,6 +52,11 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
         StringSubstitutor substitutor = new StringSubstitutor(templateValues);
         return substitutor.replace(queryTemplate);
     }
+
+    public Object getHQLQueryResultSet(String queryString){
+        query = getSession().createQuery(queryString);
+        return query.getResultList();
+    }
     public Object getHQLSingleQueryResultSet(String queryString,Map<String,Object> queryParams){
         query = getSession().createQuery(queryString);
         for(Map.Entry<String,Object> queryLoop: queryParams.entrySet()){
@@ -59,6 +64,9 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
         }
         return query.getSingleResult();
     }
+
+
+
     @Override
     public Long getHQLQueryCount(String queryString, Map<String,Object> queryParams) {
         query = getSession().createQuery("SELECT COUNT(*) " + queryString);

@@ -140,4 +140,5 @@ public class UserDaoImpl extends GenericDaoImpl<BookUser> implements UserDao {
         updateOrDeleteUser(queryString,queryParams);
     }
 
+
 }

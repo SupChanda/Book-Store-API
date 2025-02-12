@@ -9,7 +9,7 @@ import java.time.*;
 @Entity
 @Getter
 @Setter
-@Table(name = "Book_Record")
+@Table(name = "Books")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
