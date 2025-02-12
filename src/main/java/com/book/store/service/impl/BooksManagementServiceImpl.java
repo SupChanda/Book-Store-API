@@ -2,14 +2,18 @@ package com.book.store.service.impl;
 
 import com.book.store.Repository.BooksRepository;
 import com.book.store.Repository.UserRepository;
+import com.book.store.dao.BooksManagementDao;
 import com.book.store.models.domain.BookUser;
 import com.book.store.models.domain.Books;
+import com.book.store.models.dto.BooksDTO;
+import com.book.store.models.mappers.BooksMapper;
 import com.book.store.service.BooksManagementService;
 import jakarta.transaction.Transactional;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,6 +21,8 @@ public class BooksManagementServiceImpl implements BooksManagementService {
 
     @Autowired
     BooksRepository booksRepository;
+    @Autowired
+
 
     private static final String err1 = "Admin only and not ";
     private static final String err2 = ", can ";
@@ -27,12 +33,19 @@ public class BooksManagementServiceImpl implements BooksManagementService {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    BooksMapper booksMapper;
+    @Autowired
+    BooksManagementDao booksManagementDao;
     public BooksManagementServiceImpl(UserRepository userRepository){
         this.userRepository = userRepository;
     }
     @Override
-    public List<Books> getBooks(){
-        return booksRepository.findAll();
+    public List<BooksDTO> getBooks() throws BadRequestException {
+        List<Books> booksList = (List<Books>) booksManagementDao.getBooksList();
+        return this.booksMapper.toDTOList(booksList);
+        //return new ArrayList<>();
+        //return booksRepository.findAll();
     }
 
     public Books getBookByTitle(String title) throws BadRequestException {

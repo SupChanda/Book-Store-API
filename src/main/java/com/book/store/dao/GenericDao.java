@@ -8,6 +8,7 @@ public interface GenericDao<T>{
     Long getHQLQueryCount(String queryString,Map<String,Object> queryParams);
 
     Object getHQLSingleQueryResultSet(String queryString,Map<String,Object> queryParams);
+    Object getHQLQueryResultSet(String queryString);
 
     void updateOrDeleteUser(String queryString, Map<String,Object> queryParams);
 

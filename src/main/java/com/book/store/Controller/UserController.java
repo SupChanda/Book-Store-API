@@ -41,7 +41,7 @@ public class UserController {
         return userDTO;
     }
 
-    @GetMapping("/user/name/{userName}") // TO DO : Add userid as well
+    @GetMapping("/user/name/{userName}")
     public ResponseEntity<Object> getUsersByUserName(@PathVariable String userName) throws BadRequestException {
         try{
             UserDTO userDTO = userMapper.toDTO((BookUser) this.userService.getUsrByUserName(userName));
