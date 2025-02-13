@@ -1,5 +1,6 @@
 package com.book.store.Controller;
 
+import com.book.store.models.contract.BooksRequest;
 import com.book.store.models.domain.Books;
 //import com.book.store.models.domain.Books_Purchased;
 import com.book.store.models.dto.BooksDTO;
@@ -28,41 +29,62 @@ public class BooksManagementController {
         }
     }
 
-    @GetMapping("/books/{title}") //Let's use by ID as well
-    public ResponseEntity<Books> getBookByTitle(@PathVariable String title) throws BadRequestException {
+//    @GetMapping("/books/title/{title}") //Let's use by ID as well
+//    public ResponseEntity<Object> getBooksById(@PathVariable int id) throws BadRequestException {
+//        try{
+//            return new ResponseEntity<>(this.booksManagementService.getBooksByIdOrName(id),HttpStatus.OK);
+//            //return new ResponseEntity<>(this.booksManagementService.getBookByTitle(title), HttpStatus.OK);
+//        }catch(Exception ex){
+//            return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+//        }
+//    }
+
+    @GetMapping("/books/{idOrName}") //Let's use by ID as well
+    public ResponseEntity<Object> getBooksById(@PathVariable Object idOrName) throws BadRequestException {
         try{
-            return new ResponseEntity<>(this.booksManagementService.getBookByTitle(title), HttpStatus.OK);
+            return new ResponseEntity<>(this.booksManagementService.getBooksByIdOrName(idOrName),HttpStatus.OK);
+            //return new ResponseEntity<>(this.booksManagementService.getBookByTitle(title), HttpStatus.OK);
         }catch(Exception ex){
-            throw new BadRequestException(ex);
+            return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
+
 
 
 
     @PostMapping("/books")
-    public ResponseEntity<String> createBooks(@RequestBody Books bk, @RequestHeader String currentUser) throws BadRequestException {
+    public ResponseEntity<String> createBooks(@RequestBody BooksDTO booksDTO, @RequestHeader String currentUser) throws BadRequestException {
         try{
-            return new ResponseEntity<>(this.booksManagementService.createBooks(bk,currentUser), HttpStatus.OK);
+            return new ResponseEntity<>(this.booksManagementService.createBooks(booksDTO,currentUser), HttpStatus.OK);
         }catch(Exception ex){
-            throw new BadRequestException(ex.getMessage());
+            return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PutMapping("/books/{title}")// Add by ID as well
-    public ResponseEntity<String> updateBooks(@PathVariable String title, @RequestBody Books bk, @RequestHeader String currentUser) throws BadRequestException {
+//    @PutMapping("/books/{title}")// Add by ID as well
+//    public ResponseEntity<String> updateBooks(@PathVariable String title, @RequestBody Books bk, @RequestHeader String currentUser) throws BadRequestException {
+//        try{
+//            return new ResponseEntity<>(this.booksManagementService.updateBooks(title,bk,currentUser), HttpStatus.OK);
+//        }catch(Exception ex){
+//            throw new BadRequestException(ex.getMessage());
+//        }
+//    }
+
+    @PutMapping("/books")// Add by ID as well
+    public ResponseEntity<String> updateBooks(@RequestBody BooksDTO booksDTO, @RequestHeader String currentUser) throws BadRequestException {
         try{
-            return new ResponseEntity<>(this.booksManagementService.updateBooks(title,bk,currentUser), HttpStatus.OK);
+            return new ResponseEntity<>(this.booksManagementService.updateBooks(booksDTO,currentUser), HttpStatus.OK);
         }catch(Exception ex){
-            throw new BadRequestException(ex.getMessage());
+            return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 
-    @DeleteMapping("/books/{title}") // Add id as well
-    public ResponseEntity<String> deleteBooks(@PathVariable String title, @RequestHeader String currentUser) throws BadRequestException {
+    @DeleteMapping("/books") // Add id as well
+    public ResponseEntity<String> deleteBooks(@RequestBody BooksRequest booksRequest, @RequestHeader String currentUser) throws BadRequestException {
         try{
-            return new ResponseEntity<>(this.booksManagementService.deleteBooks(title,currentUser), HttpStatus.OK);
+            return new ResponseEntity<>(this.booksManagementService.deleteBooks(booksRequest,currentUser), HttpStatus.OK);
         }catch(Exception ex){
-            throw new BadRequestException(ex.getMessage());
+            return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 
