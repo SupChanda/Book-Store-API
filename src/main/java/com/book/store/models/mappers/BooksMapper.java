@@ -26,4 +26,6 @@ public interface BooksMapper {
     BooksDTO toDTO(Books books);
 
     List<BooksDTO> toDTOList(List<Books> booksList);
+    Books toBooksFromDTO(BooksDTO booksDTO);
+
 }

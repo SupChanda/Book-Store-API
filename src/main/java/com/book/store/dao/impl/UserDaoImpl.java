@@ -98,8 +98,6 @@ public class UserDaoImpl extends GenericDaoImpl<BookUser> implements UserDao {
     @Override
     public void updateUser(Integer userId, UserRequest userRequest) throws BadRequestException {
 
-
-
         Map<String, Object> templateValues = new HashMap<>();
         templateValues.put("User", BookUser.class.getName());
         templateValues.put("userName", BookUser.Fields.userName);
@@ -121,7 +119,7 @@ public class UserDaoImpl extends GenericDaoImpl<BookUser> implements UserDao {
         queryParams.put("isAdmin",userRequest.getIsAdmin());
         queryParams.put("userId",userId);
 
-        updateOrDeleteUser(queryString,queryParams);
+        updateOrDeleteObject(queryString,queryParams);
 
     }
 
@@ -137,7 +135,7 @@ public class UserDaoImpl extends GenericDaoImpl<BookUser> implements UserDao {
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("userId", userId);
 
-        updateOrDeleteUser(queryString,queryParams);
+        updateOrDeleteObject(queryString,queryParams);
     }
 
 
