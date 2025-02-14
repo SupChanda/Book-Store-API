@@ -14,6 +14,7 @@ import com.book.store.models.dto.UserDTO;
 import com.book.store.models.mappers.BooksMapper;
 import com.book.store.models.mappers.UserMapper;
 import com.book.store.service.BooksPurchaseService;
+import jakarta.persistence.NoResultException;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -78,8 +79,20 @@ public class BooksPurchaseServiceImpl implements BooksPurchaseService {
         String bookName;
         String userName;
         try{
-            BooksDTO booksDTO = this.booksMapper.toDTO((Books) booksManagementDao.getBooksByIdOrName(booksPurchasedRequest.getId()));
-            UserDTO userDTO = this.userMapper.toDTO((BookUser) userDao.getUsrByUserId(booksPurchasedRequest.getCurrentUserId()));
+            BooksDTO booksDTO;
+            UserDTO userDTO;
+
+            try{
+                booksDTO = this.booksMapper.toDTO((Books) booksManagementDao.getBooksByIdOrName(booksPurchasedRequest.getBookId()));
+            }catch(NoResultException ex){
+                return "Invalid Book Id: " + booksPurchasedRequest.getBookId();
+            }
+            //BooksDTO booksDTO = this.booksMapper.toDTO((Books) booksManagementDao.getBooksByIdOrName(booksPurchasedRequest.getId()));
+            try{
+                userDTO = this.userMapper.toDTO((BookUser) userDao.getUsrByUserId(booksPurchasedRequest.getCurrentUserId()));
+            }catch(NoResultException ex){
+                return "Invalid User Id: " + booksPurchasedRequest.getCurrentUserId();
+            }
             //Books book = booksRepository.findByTitle(title);
             //BookUser user = userRepository.findByUserName(currentUser);
 //            bookId = booksDTO.getId();

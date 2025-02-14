@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @NoArgsConstructor
 @FieldNameConstants
 public class BooksPurchasedRequest {
-    private int  id;
+    private int  bookId;
     private String transactionType;
     private int quantity;
     private int currentUserId;

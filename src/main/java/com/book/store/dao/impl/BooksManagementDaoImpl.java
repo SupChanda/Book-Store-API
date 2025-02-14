@@ -69,6 +69,7 @@ public class BooksManagementDaoImpl  extends GenericDaoImpl<Books> implements Bo
 
         Map<String,Object> queryParams = new HashMap<>();
         queryParams.put("userNameOrID",obj);
+
         return getHQLSingleQueryResultSet(queryString,queryParams);
     }
     @Override

@@ -122,6 +122,7 @@ public class BooksPurchaseDaoImpl extends GenericDaoImpl<BooksPurchased> impleme
 
             templateValues.put("Object",Books.class.getName());
             templateValues.put("id",Books.Fields.id);
+            System.out.println("check part 1");
             queryString = generateQueryString(queryFromTemplate + queryWHERETemplate,templateValues);
 
             queryParam.put("id",booksDTO.getId());
@@ -136,7 +137,7 @@ public class BooksPurchaseDaoImpl extends GenericDaoImpl<BooksPurchased> impleme
     //Checking whether the member has already rented 2 books : START ***************************************
 
             if(transactionType.equalsIgnoreCase("Rented")) {
-
+                System.out.println("check part 2");
                 queryTemplate = queryFromTemplate + queryWHERETemplate;
                 queryTemplate += " AND ${rentalStartDate} IS NULL AND ${transactionType} =: transactionType";
 
@@ -160,7 +161,9 @@ public class BooksPurchaseDaoImpl extends GenericDaoImpl<BooksPurchased> impleme
 
                 Books books1 = booksMapper.toBooksFromDTO(booksDTO);
                 BookUser user1 = userMapper.toUserFromUserDTO(userDTO);
-                BooksPurchased booksPurchased = new BooksPurchased(0,books1,user1,purchasedDate,transactionType,rentalStartDate,rentalEndDate,quantity,0.0f,booksDTO.getRentalFee());
+                BooksPurchased booksPurchased = new BooksPurchased(0,books1,user1,null,transactionType,rentalStartDate,rentalEndDate,quantity,0.0f,booksDTO.getRentalFee());
+                saveOrUpdate(booksPurchased);
+
 
             }
     //Checking whether the member has already rented 2 books : END ***************************************
