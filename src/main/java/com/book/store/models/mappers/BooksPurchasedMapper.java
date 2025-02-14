@@ -19,4 +19,6 @@ public interface BooksPurchasedMapper {
     @Mapping(target = "purchasedPrice",source = "booksPurchased.purchasedPrice")
     @Mapping(target = "rentalFeeAccrued",source = "booksPurchased.rentalFeeAccrued")
     BooksPurchasedDTO toDTO(BooksPurchased booksPurchased);
+
+    BooksPurchased toBooksPurchasedFromDTO(BooksPurchasedDTO booksPurchasedDTO);
 }

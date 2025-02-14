@@ -65,7 +65,7 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
             query.setParameter(queryLoop.getKey(),queryLoop.getValue());
             finalQueryString = finalQueryString.replace(":" + queryLoop.getKey(), queryLoop.getValue().toString());
         }
-        //System.out.println("finalQueryString " + finalQueryString);
+        System.out.println("finalQueryString " + finalQueryString);
         //System.out.println("query.getSingleResult() " + query.getSingleResult());
         return query.getSingleResult();
     }
