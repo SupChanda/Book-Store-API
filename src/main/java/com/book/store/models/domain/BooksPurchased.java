@@ -2,16 +2,18 @@ package com.book.store.models.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldNameConstants;
 
 import java.util.Date;
 
 @Entity
 @Getter
 @Setter
-@Table(name = "Books_Purchased")
+@Table(name = "BooksPurchased")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@FieldNameConstants
 public class BooksPurchased {
 
         @Id

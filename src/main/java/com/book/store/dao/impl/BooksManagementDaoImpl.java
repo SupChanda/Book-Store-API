@@ -51,17 +51,17 @@ public class BooksManagementDaoImpl  extends GenericDaoImpl<Books> implements Bo
     }
 
     @Override
-    public Object getBooksByIdOrName(Object obj) throws BadRequestException {
-        String errMessage = "Invalid ";
+    public Object getBooksByIdOrName(Object obj) throws BadRequestException {// What if the book name is 1984? taken care of on line 59
+
         Map<String,Object> templateValues = new HashMap<>();
         templateValues.put("Books", Books.class.getName());
         try{
-            obj = Integer.parseInt((String) obj);
+            if(obj instanceof String){
+                obj = Integer.parseInt((String) obj);
+            }
             templateValues.put("userNameOrID", Books.Fields.id);
-            errMessage = errMessage + "id: ";
         }catch(Exception ex){
             templateValues.put("userNameOrID", Books.Fields.title);
-            errMessage = errMessage + "title: ";
         }
         queryTemplate = queryFromTemplate + queryWhereTemplate;
         queryString = generateQueryString(queryTemplate,templateValues);
@@ -69,10 +69,6 @@ public class BooksManagementDaoImpl  extends GenericDaoImpl<Books> implements Bo
 
         Map<String,Object> queryParams = new HashMap<>();
         queryParams.put("userNameOrID",obj);
-        if(getHQLQueryCount(queryString,queryParams) == 0){
-           throw new BadRequestException(errMessage + obj);
-        }
-        //System.out.println("getHQLSingleQueryResultSet(queryString,queryParams): " + getHQLSingleQueryResultSet(queryString,queryParams));
         return getHQLSingleQueryResultSet(queryString,queryParams);
     }
     @Override
@@ -80,25 +76,19 @@ public class BooksManagementDaoImpl  extends GenericDaoImpl<Books> implements Bo
         try{
             //System.out.println("in DAO Impl");
             Books books = booksMapper.toBooksFromDTO(booksDTO);
-            Boolean isAdminUser = userMapper.toDTO((BookUser) userDao.getUsrByUserName(currentUser)).getIsAdmin();
-            System.out.println("Is Admin?: " + isAdminUser);
-            if(!isAdminUser){
-                throw new BadRequestException( currentUser + " is not an Admin User!");
-            }
             saveOrUpdate(books);
         }catch(Exception ex){
             throw new BadRequestException(ex.getMessage());
         }
-        //System.out.println("getHQLSingleQueryResultSet(queryString,queryParams): " + getHQLSingleQueryResultSet(queryString,queryParams));
-        return true; //getHQLSingleQueryResultSet(queryString,queryParams);
+        return true;
     }
 
     @Override
     public String updateBooks(BooksDTO booksDTO, String currentUser) throws BadRequestException {
-        Books books = booksMapper.toBooksFromDTO(booksDTO);
-        Boolean isAdminUser = userMapper.toDTO((BookUser) userDao.getUsrByUserName(currentUser)).getIsAdmin();
-        //System.out.println("Is Admin updateBooks?: " + isAdminUser);
-        if(!isAdminUser){
+
+        //Boolean isAdminUser = userMapper.toDTO((BookUser) userDao.getUsrByUserName(currentUser)).getIsAdmin();
+        //System.out.println("Is Admin user ?: " + userDao.isUserAdmin(currentUser));
+        if(userDao.isUserAdmin(currentUser)){
             throw new BadRequestException( currentUser + " is not an Admin User!");
         }
         getBooksByIdOrName(String.valueOf(booksDTO.getId()));
@@ -129,13 +119,8 @@ public class BooksManagementDaoImpl  extends GenericDaoImpl<Books> implements Bo
 
     @Override
     public String deleteBooks(int id, String currentUser) throws BadRequestException {
-        //Books books = booksMapper.toBooksFromDTO(booksDTO);
-        Boolean isAdminUser = userMapper.toDTO((BookUser) userDao.getUsrByUserName(currentUser)).getIsAdmin();
-        System.out.println("Is Admin?: " + isAdminUser);
-        if(!isAdminUser){
-            throw new BadRequestException( currentUser + " is not an Admin User!");
-        }
-        getBooksByIdOrName(String.valueOf(id));
+
+        //getBooksByIdOrName(String.valueOf(id));
 
         Map<String, Object> templateValues = new HashMap<>();
         templateValues.put("Books", Books.class.getName());
@@ -147,18 +132,7 @@ public class BooksManagementDaoImpl  extends GenericDaoImpl<Books> implements Bo
 
 
         updateOrDeleteObject(queryString,queryParams);
-
         return  "Book ID: " + id + " has been deleted";
     }
 
-
 }
-//System.out.println("obj instanceof Integer " + (obj instanceof String) + " " +  obj);
-//        if(obj instanceof Integer) {
-//            templateValues.put("userNameOrID", Books.Fields.id);
-//            errMessage = errMessage + "userid: ";
-//        }else{
-//            templateValues.put("userNameOrID", Books.Fields.title);
-//            errMessage = errMessage + "title: ";
-//        }
-//System.out.println("BooksDTO.Fields.class.getName() " + Books.class.getName());

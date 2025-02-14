@@ -1,5 +1,6 @@
 package com.book.store.Controller;
 
+import com.book.store.models.contract.BooksPurchasedRequest;
 import com.book.store.models.domain.BooksPurchased;
 import com.book.store.service.BooksPurchaseService;
 import lombok.RequiredArgsConstructor;
@@ -14,24 +15,32 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BooksPurchaseController {
 
-    //@Autowired
+    @Autowired
     BooksPurchaseService booksPurchaseService;
     @GetMapping("/books-transaction")
-    public ResponseEntity<List<BooksPurchased>> getPurchasedBooksDetails() throws BadRequestException {//TO DO: Delete the underscore
+    public ResponseEntity<Object> getPurchasedBooksDetails() throws BadRequestException {//TO DO: Delete the underscore
         try{
+            System.out.println(" In Books Purchased Controller");
             return new ResponseEntity<>(this.booksPurchaseService.getPurchasedBooksDetails(), HttpStatus.OK);
         }catch(Exception ex){
-            throw new BadRequestException(ex.getMessage());
+            //throw new BadRequestException(ex.getMessage());
+            return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+    @GetMapping("/books-transaction/{id}")
+    public Object getPurchasedBooksDetails(@PathVariable int id) throws BadRequestException {//TO DO: Delete the underscore
+        try{
+            System.out.println(" In Books Purchased Controller");
+            return new ResponseEntity<>(this.booksPurchaseService.getPurchasedBooksDetailsById(id), HttpStatus.OK);
+        }catch(Exception ex){
+            //throw new BadRequestException(ex.getMessage());
+            return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
     @PostMapping("/books-transaction")
-    public ResponseEntity<String> addBookPurchasedOrRentDetails(
-                                        @RequestHeader      String  title // BETTER TO DO USING ID
-                                        ,@RequestHeader     String transactionType
-                                        ,@RequestHeader     int quantity
-                                        ,@RequestHeader     String currentUser) throws BadRequestException {
+    public ResponseEntity<String> addBookPurchasedOrRentDetails(@RequestBody BooksPurchasedRequest booksPurchasedRequest) throws BadRequestException {
         try{
-            return new ResponseEntity<>(this.booksPurchaseService.addBookPurchasedOrRentDetails(title,transactionType,quantity,currentUser), HttpStatus.OK);
+            return new ResponseEntity<>(this.booksPurchaseService.addBookPurchasedOrRentDetails(booksPurchasedRequest), HttpStatus.OK);
         }catch(Exception ex){
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
