@@ -60,10 +60,10 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
     }
     public Object getHQLSingleQueryResultSet(String queryString,Map<String,Object> queryParams){
         query = getSession().createQuery(queryString);
-        //String finalQueryString = queryString;
+        String finalQueryString = queryString;
         for(Map.Entry<String,Object> queryLoop: queryParams.entrySet()){
             query.setParameter(queryLoop.getKey(),queryLoop.getValue());
-            //finalQueryString = finalQueryString.replace(":" + queryLoop.getKey(), queryLoop.getValue().toString());
+            finalQueryString = finalQueryString.replace(":" + queryLoop.getKey(), queryLoop.getValue().toString());
         }
         //System.out.println("finalQueryString " + finalQueryString);
         //System.out.println("query.getSingleResult() " + query.getSingleResult());
@@ -73,16 +73,16 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 
 
     @Override
-    public Long getHQLQueryCount(String queryString, Map<String,Object> queryParams) {
+    public Object getHQLQueryCount(String queryString, Map<String,Object> queryParams) {
         String finalQueryString = queryString;
         query = getSession().createQuery("SELECT COUNT(*) " + queryString);
         for(Map.Entry<String,Object> queryLoop: queryParams.entrySet()){
             query.setParameter(queryLoop.getKey(),queryLoop.getValue());
             finalQueryString = finalQueryString.replace(":" + queryLoop.getKey(), queryLoop.getValue().toString());
         }
-//        System.out.println("query: " + query);
+        //System.out.println("finalQueryString: " + finalQueryString);
 //        System.out.println(query.getSingleResult());
-        return (Long) query.getSingleResult();
+        return query.getSingleResult();
     }
 
 

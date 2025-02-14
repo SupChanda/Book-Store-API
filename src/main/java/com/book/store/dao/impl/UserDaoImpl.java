@@ -28,9 +28,25 @@ public class UserDaoImpl extends GenericDaoImpl<BookUser> implements UserDao {
             "b.${isActiveMember} = :isActiveMember, b.${isAdmin} = :isAdmin WHERE b.${id} = :userId";
    private final String deleteQueryTemplate = "DELETE " + queryTemplateByUserId;
 
+   @Override
+   public boolean isUserAdmin(String currentUser){
+       Map<String, Object> templateValues = new HashMap<>();
+       templateValues.put("User", BookUser.class.getName());
+       templateValues.put("userName", BookUser.Fields.userName);
+
+       Map<String, Object> queryParams = new HashMap<>();
+       queryParams.put("userName",currentUser);
+
+       String queryString = generateQueryString(queryTemplateByUserName,templateValues);
+       System.out.println("yes");
+       if(getHQLQueryCount(queryString,queryParams).equals(0) ){
+           return false;
+       }
+       return true;
+   }
     @Override
     public Object getUsrByUserName(String userName) throws BadRequestException {
-        //System.out.println("yes it in DAO impl");
+
         Map<String, Object> templateValues = new HashMap<>();
         templateValues.put("User", BookUser.class.getName());
         templateValues.put("userName", BookUser.Fields.userName);
@@ -39,19 +55,12 @@ public class UserDaoImpl extends GenericDaoImpl<BookUser> implements UserDao {
         queryParams.put("userName",userName);
 
         String queryString = generateQueryString(queryTemplateByUserName,templateValues);
-        //System.out.println("queryString: " + queryString);
-        if(getHQLQueryCount(queryString,queryParams) == 0){
-            //System.out.println(" In DAO Impl catch");
-            throw new BadRequestException("Invalid UserName: " + userName);
-        }
-        //System.out.println("yes in DAO");
-        //System.out.println("getHQLSingleQueryResultSet:  " + getHQLSingleQueryResultSet(queryString,queryParams));
         return getHQLSingleQueryResultSet(queryString,queryParams);
 
     }
     @Override
     public Object getUsrByUserId(Integer userId) throws BadRequestException {
-        //System.out.println("yes it in DAO impl");
+
         Map<String, Object> templateValues = new HashMap<>();
         templateValues.put("User", BookUser.class.getName());
         templateValues.put("id", BookUser.Fields.id);
@@ -60,18 +69,9 @@ public class UserDaoImpl extends GenericDaoImpl<BookUser> implements UserDao {
         queryParams.put("userId",userId);
 
         String queryString = generateQueryString(queryTemplateByUserId,templateValues);
-        //System.out.println("queryString: " + queryString);
-        if(getHQLQueryCount(queryString,queryParams) == 0){
-            //System.out.println(" In DAO Impl catch");
-            throw new BadRequestException("Invalid UserID: " + userId);
-        }
-        //System.out.println("yes in DAO");
-        //System.out.println("getHQLSingleQueryResultSet:  " + getHQLSingleQueryResultSet(queryString,queryParams));
         return getHQLSingleQueryResultSet(queryString,queryParams);
 
     }
-
-
 
     @Override
     public boolean addUser(String userName, UserRequest userRequest) {
@@ -84,7 +84,7 @@ public class UserDaoImpl extends GenericDaoImpl<BookUser> implements UserDao {
             queryParams.put("userName",userName);
 
             String queryString = generateQueryString(queryTemplateByUserName,templateValues);
-            Long userCount = getHQLQueryCount(queryString,queryParams);
+            Long userCount = (long) getHQLQueryCount(queryString,queryParams);
             //System.out.println("userCount: " + userCount);
 
             if (userCount == 0) {
@@ -120,6 +120,9 @@ public class UserDaoImpl extends GenericDaoImpl<BookUser> implements UserDao {
         queryParams.put("userId",userId);
 
         updateOrDeleteObject(queryString,queryParams);
+
+
+
 
     }
 

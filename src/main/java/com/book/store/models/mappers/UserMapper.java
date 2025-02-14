@@ -26,5 +26,7 @@ public interface UserMapper {
 
     BookUser toUserFromUserRequest(UserRequest userRequest);
 
+    BookUser toUserFromUserDTO(UserDTO userDTO);
+
 
 }
