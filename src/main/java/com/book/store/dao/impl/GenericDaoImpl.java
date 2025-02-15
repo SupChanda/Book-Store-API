@@ -2,8 +2,10 @@ package com.book.store.dao.impl;
 
 import com.book.store.dao.GenericDao;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import jakarta.transaction.Transactional;
 import org.hibernate.Session;
 import org.apache.commons.text.StringSubstitutor;
 import org.hibernate.Transaction;
@@ -29,11 +31,17 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
         // session.flush();
 //        session.clear();
     }
+
     @Override
+    @Transactional
     public void updateOrDeleteObject(String queryString, Map<String,Object> queryParams ){
 
-        Transaction transaction = null;
-        transaction = getSession().beginTransaction();
+//        Transaction transaction = null;
+//        if(getSession().getTransaction().isActive()){
+//            transaction = getSession().getTransaction();
+//        }else{
+//            transaction = getSession().beginTransaction();
+//        }
         query = getSession().createQuery(queryString);
         String finalQueryString = queryString;
         for (Map.Entry<String, Object> queryLoop : queryParams.entrySet()) {
@@ -42,7 +50,7 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
         }
         System.out.println("query " + finalQueryString);
         query.executeUpdate();
-        transaction.commit();
+        //transaction.commit();
 
 
         //T entityDB = session.get(entityClass,entityId);
@@ -67,7 +75,11 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
         }
         System.out.println("finalQueryString " + finalQueryString);
         //System.out.println("query.getSingleResult() " + query.getSingleResult());
-        return query.getSingleResult();
+        try {
+            return query.getSingleResult();
+        }catch(NoResultException ex){
+            return null;
+        }
     }
 
 

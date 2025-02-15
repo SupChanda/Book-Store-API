@@ -12,5 +12,7 @@ public interface GenericDao<T>{
 
     void updateOrDeleteObject(String queryString, Map<String,Object> queryParams);
 
+    //Object findById
+
 
 }

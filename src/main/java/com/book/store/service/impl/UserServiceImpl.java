@@ -7,6 +7,7 @@ import com.book.store.models.dto.BooksDTO;
 import com.book.store.models.dto.UserDTO;
 import com.book.store.models.mappers.UserMapper;
 import com.book.store.service.UserService;
+import jakarta.transaction.Transactional;
 import org.apache.catalina.User;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,25 +67,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public String updateUser(UserRequest userRequest, String currentUser) throws BadRequestException {
         try {
 
-            String userName = userRequest.getUserName();
+            String userName = userRequest.getUserName();//user request username
             int userId = userRequest.getId();
             boolean isAdminUser = userDao.isUserAdmin(currentUser);
-            if (!isAdminUser) {
-                throw new BadRequestException("Invalid Admin user: " + currentUser + "!");
-            }
+//            if (!isAdminUser) {
+//                throw new BadRequestException("Invalid Admin user: " + currentUser + "!");
+//            }
 
-            UserDTO adminUserFound = userMapper.toDTO((BookUser) userDao.getUsrByUserName(currentUser));
+            //UserDTO adminUserFound = userMapper.toDTO((BookUser) userDao.getUsrByUserName(currentUser));
             UserDTO userNameFound = userMapper.toDTO((BookUser) userDao.getUsrByUserId(userId));
 
-            if (isAdminUser || userNameFound.getId().equals(adminUserFound.getId())) {
-                System.out.println("Is current user admin? : " + adminUserFound.getIsAdmin());
+            if (isAdminUser || userRequest.getUserName().equalsIgnoreCase(currentUser)) {
+                //System.out.println("Is current user admin? : " + adminUserFound.getIsAdmin());
                 userDao.updateUser(userId, userRequest);
                 return currentUser + " updated " + userName + " record";
             }else {
-                throw new BadRequestException("Invalid userid: "+ userId );
+                throw new BadRequestException("Invalid userid: "+ userRequest.getId() );
             }
         }catch(Exception ex){
             throw new BadRequestException(ex.getMessage());
@@ -93,22 +95,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public String deleteUser(int userId, String currentUser) throws BadRequestException {
         try {
-            if (userDao.isUserAdmin(currentUser)) {
-                throw new BadRequestException(currentUser + " is not an admin user!");
-            }
             Integer userIdFound = userMapper.toDTO((BookUser) userDao.getUsrByUserId(userId)).getId();
+            System.out.println("userIdFound " + userIdFound);
             UserDTO isAdminUser = userMapper.toDTO((BookUser) userDao.getUsrByUserName(currentUser));
-            if(isAdminUser.getId().equals(userIdFound)){
+            System.out.println("isAdminUser.getId() " + isAdminUser.getId());
+            System.out.println("userDao.isUserAdmin(currentUser) " + userDao.isUserAdmin(currentUser));
+            boolean userIdMatch=false;
+            if(isAdminUser.getId().equals(userIdFound)|| userDao.isUserAdmin(currentUser) ){
+                userIdMatch = true;
+            }
+
+            if (!userIdMatch) {
+                throw new BadRequestException(currentUser + " is either not an admin user neither has userid: " + userId);
+            }else { //
                 userDao.deleteUser(userId, currentUser);
                 return "User ID : " + userId + " has been deleted";
-            }
-//            else if (userIdFound == null) {
-//                throw new BadRequestException("Invalid userId: " + userId);
-//            }
-            else {
-                throw new BadRequestException(currentUser + " ,you cannot delete userId: " + userId);
             }
         }catch(Exception ex){
             throw new BadRequestException(ex.getMessage());

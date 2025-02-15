@@ -2,6 +2,7 @@ package com.book.store.Controller;
 
 import com.book.store.models.contract.BooksPurchasedRequest;
 import com.book.store.models.domain.BooksPurchased;
+import com.book.store.models.dto.BooksPurchasedDTO;
 import com.book.store.service.BooksPurchaseService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
@@ -46,12 +47,10 @@ public class BooksPurchaseController {
         }
     }
 
-    @PutMapping("/return/books-transaction/{bookId}")
-    public ResponseEntity<String> UpdateBookDetailsOnReturn(
-            @PathVariable      int bookId
-            ,@RequestHeader     int userId) throws BadRequestException {
+    @PutMapping("/return/books-transaction")
+    public ResponseEntity<String> UpdateBookDetailsOnReturn(@RequestBody BooksPurchasedDTO booksPurchasedDTO) throws BadRequestException {
         try{
-            return new ResponseEntity<>(this.booksPurchaseService.UpdateBookDetailsOnReturn(bookId,userId), HttpStatus.OK);
+            return new ResponseEntity<>(this.booksPurchaseService.UpdateBookDetailsOnReturn(booksPurchasedDTO), HttpStatus.OK);
         }catch(Exception ex){
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
