@@ -5,11 +5,13 @@ import com.book.store.Repository.UserRepository;
 import com.book.store.dao.BooksManagementDao;
 import com.book.store.dao.BooksPurchaseDao;
 import com.book.store.dao.UserDao;
+import com.book.store.dao.impl.GenericDaoImpl;
 import com.book.store.models.contract.BooksPurchasedRequest;
 import com.book.store.models.domain.Books;
 import com.book.store.models.domain.BookUser;
 import com.book.store.models.domain.BooksPurchased;
 import com.book.store.models.dto.BooksDTO;
+import com.book.store.models.dto.BooksPurchasedDTO;
 import com.book.store.models.dto.UserDTO;
 import com.book.store.models.mappers.BooksMapper;
 import com.book.store.models.mappers.UserMapper;
@@ -25,7 +27,7 @@ import java.util.*;
 
 @Service
 @Transactional(propagation = Propagation.REQUIRES_NEW)
-public class BooksPurchaseServiceImpl implements BooksPurchaseService {
+public class BooksPurchaseServiceImpl extends GenericDaoImpl<BooksPurchaseDao> implements BooksPurchaseService {
 
 
 
@@ -75,6 +77,7 @@ public class BooksPurchaseServiceImpl implements BooksPurchaseService {
 
     }
     @Override
+    @Transactional
     public String addBookPurchasedOrRentDetails(BooksPurchasedRequest booksPurchasedRequest) throws BadRequestException {
         String bookName;
         String userName;
@@ -84,23 +87,16 @@ public class BooksPurchaseServiceImpl implements BooksPurchaseService {
 
             try{
                 booksDTO = this.booksMapper.toDTO((Books) booksManagementDao.getBooksByIdOrName(booksPurchasedRequest.getBookId()));
+                bookName = booksDTO.getTitle();
             }catch(NoResultException ex){
                 return "Invalid Book Id: " + booksPurchasedRequest.getBookId();
             }
-            //BooksDTO booksDTO = this.booksMapper.toDTO((Books) booksManagementDao.getBooksByIdOrName(booksPurchasedRequest.getId()));
             try{
                 userDTO = this.userMapper.toDTO((BookUser) userDao.getUsrByUserId(booksPurchasedRequest.getCurrentUserId()));
+                userName = userDTO.getUserName();
             }catch(NoResultException ex){
                 return "Invalid User Id: " + booksPurchasedRequest.getCurrentUserId();
             }
-            //Books book = booksRepository.findByTitle(title);
-            //BookUser user = userRepository.findByUserName(currentUser);
-//            bookId = booksDTO.getId();
-//            userId = userDTO.getId();
-//            bookName = booksDTO.getTitle();
-//            userName = userDTO.getUserName();
-            //purchasedPrice = booksDTO.getPrice();
-            //rentalFeeAccrued = booksDTO.getRentalFee();
             transactionType = booksPurchasedRequest.getTransactionType();
             quantity = booksPurchasedRequest.getQuantity();
 
@@ -109,20 +105,41 @@ public class BooksPurchaseServiceImpl implements BooksPurchaseService {
 
         }
         catch (Exception ex){
-            throw new BadRequestException(booksPurchasedRequest.getCurrentUserId() + ex.getMessage());
+            throw new BadRequestException(ex.getMessage());
         }
-        return  null ; //userName + " has " + transactionType + " the book '" + bookName + "'";
+        return  userName + " has " + transactionType.toLowerCase() + " the book '" + bookName + "'";
     }
 
     @Override
-    public String UpdateBookDetailsOnReturn(int bookId, int userId) throws BadRequestException {
-        try{
-            booksPurchaseDao.UpdateBookDetailsOnReturn(bookId,userId);
+    @Transactional
+    public String UpdateBookDetailsOnReturn(BooksPurchasedDTO booksPurchasedDTO) throws BadRequestException {
+        String bookName;
+        String userName;
+        try {
+            BooksDTO booksDTO;
+            UserDTO userDTO;
+
+            try {
+                booksDTO = this.booksMapper.toDTO((Books) booksManagementDao.getBooksByIdOrName(booksPurchasedDTO.getBookId()));
+                bookName = booksDTO.getTitle();
+            } catch (NoResultException ex) {
+                return "Invalid Book Id: " + booksPurchasedDTO.getBookId();
+            }
+            try {
+                userDTO = this.userMapper.toDTO((BookUser) userDao.getUsrByUserId(booksPurchasedDTO.getUserId()));
+                userName = userDTO.getUserName();
+            } catch (NoResultException ex) {
+                return "Invalid User Id: " + booksPurchasedDTO.getUserId();
+            }
+            booksPurchaseDao.UpdateBookDetailsOnReturn(booksPurchasedDTO);
+
+//        try{
+//
         }
         catch (Exception ex){
             return ex.getMessage();
         }
-        return "Book Id " + bookId + " is returned";
-    }
+        return "Book Id: " + booksPurchasedDTO.getBookId() + " has been returned"; //+ bookId + " is returned";
+        }
 
 }

@@ -75,6 +75,9 @@ public class BooksManagementDaoImpl  extends GenericDaoImpl<Books> implements Bo
     @Override
     public boolean createBooks(BooksDTO booksDTO, String currentUser) throws BadRequestException {
         try{
+            if(!userDao.isUserAdmin(currentUser)){
+                throw new BadRequestException( currentUser + " is not an Admin User!");
+            }
             //System.out.println("in DAO Impl");
             Books books = booksMapper.toBooksFromDTO(booksDTO);
             saveOrUpdate(books);
@@ -89,9 +92,9 @@ public class BooksManagementDaoImpl  extends GenericDaoImpl<Books> implements Bo
 
         //Boolean isAdminUser = userMapper.toDTO((BookUser) userDao.getUsrByUserName(currentUser)).getIsAdmin();
         //System.out.println("Is Admin user ?: " + userDao.isUserAdmin(currentUser));
-        if(userDao.isUserAdmin(currentUser)){
-            throw new BadRequestException( currentUser + " is not an Admin User!");
-        }
+//        if(!userDao.isUserAdmin(currentUser)){
+//            throw new BadRequestException( currentUser + " is not an Admin User!");
+//        }
         getBooksByIdOrName(String.valueOf(booksDTO.getId()));
 
         Map<String, Object> templateValues = new HashMap<>();

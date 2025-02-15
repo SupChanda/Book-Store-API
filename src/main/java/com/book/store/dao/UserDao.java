@@ -7,7 +7,7 @@ import org.apache.coyote.BadRequestException;
 
 public interface UserDao {
 
-    boolean isUserAdmin(String currentUser);
+    boolean isUserAdmin(String currentUser) throws BadRequestException;
     boolean addUser(String uName, UserRequest userRequest);
     void updateUser(Integer userId, UserRequest userRequest) throws BadRequestException;
     Object getUsrByUserName(String userName) throws BadRequestException;
