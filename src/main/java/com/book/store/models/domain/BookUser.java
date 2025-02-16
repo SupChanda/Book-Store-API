@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 @Data
 @Getter
 @Setter
+@Builder
 @FieldNameConstants
 public class BookUser {
 
