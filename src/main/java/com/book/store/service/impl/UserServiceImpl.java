@@ -8,7 +8,6 @@ import com.book.store.models.dto.UserDTO;
 import com.book.store.models.mappers.UserMapper;
 import com.book.store.service.UserService;
 import jakarta.transaction.Transactional;
-import org.apache.catalina.User;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +30,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserDao userDao;
 
-    Boolean nameAlreadyPresent = false;
 
     public List<BookUser> getUsrList() {
             return userRepository.findAll();
