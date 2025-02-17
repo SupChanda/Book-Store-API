@@ -1,49 +1,60 @@
-//package com.book.store.service.impl;
-//
-//import com.book.store.dao.GenericDao;
-//import com.book.store.dao.UserDao;
-//import com.book.store.dao.impl.GenericDaoImpl;
-//import com.book.store.dao.impl.UserDaoImpl;
-//import com.book.store.helpers.Generators;
-//import com.book.store.models.domain.BookUser;
-//import com.book.store.models.dto.UserDTO;
-//import com.book.store.models.mappers.UserMapper;
-//import com.book.store.service.UserService;
-//import jakarta.persistence.EntityManager;
-//import org.apache.coyote.BadRequestException;
-//import org.junit.Test;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.extension.ExtendWith;
-//import org.mockito.InjectMocks;
-//import org.mockito.Mock;
-//import org.mockito.Spy;
-//import org.mockito.junit.jupiter.MockitoExtension;
-//
-//import static org.mockito.Mockito.when;
-//
-//@ExtendWith(MockitoExtension.class)
-//public class UserServiceImplTest {
-//
-//    @Mock
-//    private UserDao userDao;
-//
-//    @Mock
-//    private GenericDaoImpl<BookUser> genericDaoImpl;
-//    @Mock
-//    private UserMapper userMapper;
-//    @InjectMocks
-//    @Spy
-//    private UserServiceImpl userServiceImpl;
-//    @BeforeEach
-//    public void setup(){
-//        genericDaoImpl.getSession();
-//    }
-//    @Test
-//    public void getUsrByUserNameTest() throws BadRequestException {
-//        BookUser bookUser = Generators.generateTestUser();
-//        when(userServiceImpl.getUsrByUserName(bookUser.getUserName())).thenReturn(bookUser);
-//    }
-//}
+package com.book.store.service.impl;
+
+import com.book.store.dao.GenericDao;
+import com.book.store.dao.UserDao;
+import com.book.store.dao.impl.GenericDaoImpl;
+import com.book.store.dao.impl.UserDaoImpl;
+import com.book.store.helpers.Generators;
+import com.book.store.models.contract.UserRequest;
+import com.book.store.models.domain.BookUser;
+import com.book.store.models.dto.UserDTO;
+import com.book.store.models.mappers.UserMapper;
+import com.book.store.service.UserService;
+import jakarta.persistence.EntityManager;
+import org.apache.coyote.BadRequestException;
+import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
+
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+public class UserServiceImplTest {
+
+    @InjectMocks
+    private UserDao userDao;
+    @Mock
+    private UserDaoImpl userDaoImpl = new UserDaoImpl();
+
+    @Mock
+    private GenericDao<BookUser> genericDao = new GenericDaoImpl<>();
+
+    @Mock
+    private GenericDaoImpl<BookUser> genericDaoImpl = new GenericDaoImpl<>();
+    @Mock
+    private UserMapper userMapper;
+    @InjectMocks
+    @Spy
+    private UserServiceImpl userServiceImpl = new UserServiceImpl(userDao,userMapper);
+    @BeforeEach
+    public void setup(){
+        genericDaoImpl.getSession();
+        MockitoAnnotations.openMocks(this);
+    }
+    @Test
+    public void getUsrByUserNameTest() throws BadRequestException {
+        BookUser bookUser = Generators.generateTestUser();
+        System.out.println(bookUser + " " + bookUser.getUserName());
+        when(userServiceImpl.getUsrByUserName(bookUser.getUserName())).thenReturn(bookUser);
+    }
+}
 
 
 //Error I am trying to solve

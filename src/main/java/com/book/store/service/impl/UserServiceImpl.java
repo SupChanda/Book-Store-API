@@ -30,6 +30,13 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserDao userDao;
 
+    @Autowired
+    public UserServiceImpl(UserDao userDao,UserMapper userMapper){
+        this.userDao = userDao;
+        this.userMapper = userMapper;
+    }
+
+
 
     public List<BookUser> getUsrList() {
             return userRepository.findAll();
