@@ -1,5 +1,6 @@
 package com.book.store.service.impl;
 
+import com.book.store.Repository.UserRepository;
 import com.book.store.dao.GenericDao;
 import com.book.store.dao.UserDao;
 import com.book.store.dao.impl.GenericDaoImpl;
@@ -28,31 +29,32 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class UserServiceImplTest {
 
-    @InjectMocks
+    @Mock
     private UserDao userDao;
     @Mock
-    private UserDaoImpl userDaoImpl = new UserDaoImpl();
+    private UserRepository userRepository;
+//    @Mock
+//    private UserDaoImpl userDaoImpl;
 
-    @Mock
-    private GenericDao<BookUser> genericDao = new GenericDaoImpl<>();
-
-    @Mock
-    private GenericDaoImpl<BookUser> genericDaoImpl = new GenericDaoImpl<>();
     @Mock
     private UserMapper userMapper;
+
     @InjectMocks
-    @Spy
-    private UserServiceImpl userServiceImpl = new UserServiceImpl(userDao,userMapper);
+    //@Spy
+    private UserServiceImpl userService;
+
     @BeforeEach
     public void setup(){
-        genericDaoImpl.getSession();
+        //genericDaoImpl.getSession();
         MockitoAnnotations.openMocks(this);
     }
+
     @Test
     public void getUsrByUserNameTest() throws BadRequestException {
         BookUser bookUser = Generators.generateTestUser();
         System.out.println(bookUser + " " + bookUser.getUserName());
-        when(userServiceImpl.getUsrByUserName(bookUser.getUserName())).thenReturn(bookUser);
+        //when(userDao.getUsrByUserName(bookUser.getUserName())).thenReturn(bookUser);
+        userService.getUsrByUserName(bookUser.getUserName());
     }
 }
 

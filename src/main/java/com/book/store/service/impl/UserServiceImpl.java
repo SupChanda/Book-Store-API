@@ -18,10 +18,7 @@ import java.util.*;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    BookUser user;
-    @Autowired
-    List<BookUser> uList;
+
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -30,11 +27,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserDao userDao;
 
-    @Autowired
-    public UserServiceImpl(UserDao userDao,UserMapper userMapper){
-        this.userDao = userDao;
-        this.userMapper = userMapper;
-    }
+    //@Autowired
+//    public UserServiceImpl(UserDao userDao,UserMapper userMapper){
+//        this.userDao = userDao;
+//        this.userMapper = userMapper;
+//    }
 
 
 

@@ -8,6 +8,6 @@ import java.util.List;
 public interface BooksReviewService {
 
     BooksReview addBooksReview(int bookId, int userId, String comments) throws BadRequestException;
-    List<BooksReview> getBooksReview() throws BadRequestException;
+    Object getBooksReview() throws BadRequestException;
     List<BooksReview> getBooksReviewByID(int bookId) throws  BadRequestException;
 }
