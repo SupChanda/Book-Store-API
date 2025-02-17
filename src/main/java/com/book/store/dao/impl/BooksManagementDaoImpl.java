@@ -13,11 +13,12 @@ import lombok.Generated;
 import org.apache.catalina.User;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
-@Service
+@Repository
 public class BooksManagementDaoImpl  extends GenericDaoImpl<Books> implements BooksManagementDao {
 
     @Autowired
