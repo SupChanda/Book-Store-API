@@ -9,7 +9,7 @@ import java.util.Date;
 @Entity
 @Getter
 @Setter
-@Table(name="Books_Review")
+@Table(name="BooksReview")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

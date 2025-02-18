@@ -72,7 +72,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public String updateUser(UserRequest userRequest, String currentUser) throws BadRequestException {
         try {
-
             String userName = userRequest.getUserName();//user request username
             int userId = userRequest.getId();
             boolean isAdminUser = userDao.isUserAdmin(currentUser);
@@ -100,6 +99,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public String deleteUser(int userId, String currentUser) throws BadRequestException {
         try {
+            System.out.println(" In delete user service impl");
             Integer userIdFound = userMapper.toDTO((BookUser) userDao.getUsrByUserId(userId)).getId();
             System.out.println("userIdFound " + userIdFound);
             UserDTO isAdminUser = userMapper.toDTO((BookUser) userDao.getUsrByUserName(currentUser));

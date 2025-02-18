@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS Book_Purchased
-CREATE TABLE Book_Purchased
+DROP TABLE IF EXISTS BookPurchased
+CREATE TABLE BookPurchased
 (
    ID                   INT     IDENTITY(0,1) PRIMARY KEY
    ,BookID              INT     NOT NULL

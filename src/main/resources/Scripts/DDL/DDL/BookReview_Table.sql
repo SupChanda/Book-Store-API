@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS Books_Review
-CREATE TABLE Books_Review
+DROP TABLE IF EXISTS BooksReview
+CREATE TABLE BooksReview
 (
     ID              INT     IDENTITY(0,1) PRIMARY KEY
     ,BookID         INT     NOT NULL

@@ -67,27 +67,7 @@ public class BooksPurchaseDaoImpl extends GenericDaoImpl<BooksPurchased> impleme
     public BooksPurchaseDaoImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
-    public void setParameter(Query query, int bookId,int userId,String transactionType,int quantity,float purchasedPrice,float rentalFeeAccrued){
-        boolean purchased = transactionType.equalsIgnoreCase("Purchased");
-        float defaultValue = 0.0f;
-        query.setParameter(1, bookId);
-        query.setParameter(2, userId);
-        query.setParameter(3, transactionType);
-        if(purchased){
-            query.setParameter(4, purchasedDate);
-            query.setParameter(5, null);
-            query.setParameter(6, null);
-            query.setParameter(8, purchasedPrice);
-            query.setParameter(9, defaultValue);
-        }else{
-            query.setParameter(4, null);
-            query.setParameter(5, rentalStartDate);
-            query.setParameter(6, null);
-            query.setParameter(8, defaultValue);
-            query.setParameter(9, rentalFeeAccrued);
-        }
-        query.setParameter(7, quantity);
-    }
+
     public Object getAllPurchasedBooksDetails(){
         try {
             Map<String,Object> templateValues = new HashMap<>();
