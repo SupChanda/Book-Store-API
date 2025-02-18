@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS Book_Record
-CREATE TABLE Book_Record
+DROP TABLE IF EXISTS Books
+CREATE TABLE Books
 (
     ID                      INT NOT NULL IDENTITY(0,1) PRIMARY KEY
     ,Title                  VARCHAR(80) NOT NULL UNIQUE

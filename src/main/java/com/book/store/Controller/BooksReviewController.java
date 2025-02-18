@@ -1,5 +1,7 @@
 package com.book.store.Controller;
 
+import com.book.store.models.contract.BooksReviewRequest;
+import com.book.store.models.domain.BooksReview;
 import com.book.store.service.BooksReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 public class BooksReviewController {
-    //@Autowired
+    @Autowired
     BooksReviewService booksReviewService;
 
     @GetMapping("/books-reviews")

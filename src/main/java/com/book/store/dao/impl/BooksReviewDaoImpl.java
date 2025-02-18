@@ -1,14 +1,12 @@
 package com.book.store.dao.impl;
 
 import com.book.store.dao.BooksReviewDao;
-import com.book.store.models.contract.BooksReviewRequest;
 import com.book.store.models.domain.BooksReview;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import org.apache.coyote.BadRequestException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
@@ -27,14 +25,14 @@ public class BooksReviewDaoImpl extends GenericDaoImpl<BooksReview> implements B
     private final String queryWhereTemplate = "WHERE b.${id} =:id";
 
     @Override
-    public Object getBooksReview(){
+    public List<BooksReview> getBooksReview(){
         Map<String,Object> templateValues = new HashMap<>();
-        templateValues.put("Object", BooksReviewRequest.class.getName());
-        templateValues.put("id", BooksReviewRequest.Fields.id);
+        templateValues.put("Object", BooksReview.class.getName());
+        templateValues.put("id", BooksReview.Fields.id);
         queryString = generateQueryString(queryFromTemplate,templateValues);
 
         //String resultSet = "SELECT * FROM Books_Review";
-        return getHQLQueryResultSet(queryString);
+        return (List<BooksReview>) getHQLQueryResultSet(queryString);
     }
 
     public List<BooksReview> getBooksReviewById(int bookId){
