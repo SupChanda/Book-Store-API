@@ -81,6 +81,21 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
             return null;
         }
     }
+    public Object getHQLFullQueryResultSet(String queryString,Map<String,Object> queryParams){
+        query = getSession().createQuery(queryString);
+        String finalQueryString = queryString;
+        for(Map.Entry<String,Object> queryLoop: queryParams.entrySet()){
+            query.setParameter(queryLoop.getKey(),queryLoop.getValue());
+            finalQueryString = finalQueryString.replace(":" + queryLoop.getKey(), queryLoop.getValue().toString());
+        }
+        System.out.println("finalQueryString " + finalQueryString);
+        //System.out.println("query.getSingleResult() " + query.getSingleResult());
+        try {
+            return query.getResultList();
+        }catch(NoResultException ex){
+            return null;
+        }
+    }
 
 
 

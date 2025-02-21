@@ -17,6 +17,9 @@ public interface BooksReviewMapper {
     @Mapping(target = "dateReviewed",source = "booksReview.dateReviewed")
     @Mapping(target = "comments",source = "booksReview.comments")
     BooksReviewRequest toRequest(BooksReview booksReview);
-    BooksReview toBooksReview(BooksReviewRequest booksReviewRequest);
+
+    @Mapping(target = "books.id",source = "bookId")
+    @Mapping(target = "user.id",source = "userId")
+    BooksReview toBooksReviewFromRequest(BooksReviewRequest booksReviewRequest);
     List<BooksReviewRequest> toBooksReviewRequestListFromRequest(List<BooksReview> booksReviewList);
 }

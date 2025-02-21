@@ -12,6 +12,7 @@ public interface BooksPurchaseDao {
 
     Object getAllPurchasedBooksDetails();
     Object getPurchasedBooksDetailsById(int id);
+    Object getPurchasedBooksDetailsByUserIdAndBookId(int userId,int bookId);
     void addBookPurchasedOrRentDetails(BooksDTO booksDTO, UserDTO userDTO,String transactionType,int quantity) throws BadRequestException;
     void UpdateBookDetailsOnReturn(BooksPurchasedDTO booksPurchasedDTO) throws BadRequestException;
 }

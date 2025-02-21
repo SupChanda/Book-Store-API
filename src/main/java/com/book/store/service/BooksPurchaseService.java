@@ -11,6 +11,6 @@ public interface BooksPurchaseService {
     Object getPurchasedBooksDetails() throws BadRequestException;
     Object getPurchasedBooksDetailsById(int id) throws BadRequestException;
     String addBookPurchasedOrRentDetails(BooksPurchasedRequest booksPurchasedRequest) throws BadRequestException;
-
+    Object getPurchasedBooksDetailsByUserIdAndBookId(int userId, int bookId) throws BadRequestException;
     String UpdateBookDetailsOnReturn(BooksPurchasedDTO booksPurchasedDTO) throws BadRequestException;
 }
