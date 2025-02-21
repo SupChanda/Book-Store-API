@@ -55,6 +55,7 @@ public class UserServiceImpl implements UserService {
         }
     }
     @Override
+    @Transactional
     public String addUser(UserRequest userRequest) throws BadRequestException {
         try{
         String userName = userRequest.getUserName();

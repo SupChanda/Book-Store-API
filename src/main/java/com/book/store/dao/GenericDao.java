@@ -10,6 +10,7 @@ public interface GenericDao<T>{
     Object getHQLSingleQueryResultSet(String queryString,Map<String,Object> queryParams);
     Object getHQLQueryResultSet(String queryString);
 
+    Object getHQLFullQueryResultSet(String queryString,Map<String,Object> queryParams);
     void updateOrDeleteObject(String queryString, Map<String,Object> queryParams);
 
     //Object findById

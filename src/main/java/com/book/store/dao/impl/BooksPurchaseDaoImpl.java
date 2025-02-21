@@ -58,7 +58,7 @@ public class BooksPurchaseDaoImpl extends GenericDaoImpl<BooksPurchased> impleme
     private String queryString;
 
     private final Date purchasedDate = Date.valueOf(LocalDate.now());
-    private Date rentalStartDate = Date.valueOf((LocalDate.now()));
+    private final Date rentalStartDate = Date.valueOf((LocalDate.now()));
     private final Date rentalEndDate    = Date.valueOf(LocalDate.now());
     Date today =  Date.valueOf(LocalDate.now());
     private Query queryInsert;
@@ -97,6 +97,24 @@ public class BooksPurchaseDaoImpl extends GenericDaoImpl<BooksPurchased> impleme
 //            return booksPurchasedDTO;
         }catch(Exception ex){
             return "Invalid id: "+ id;
+        }
+    }
+
+    public Object getPurchasedBooksDetailsByUserIdAndBookId(int userId,int bookId){
+        try {
+            String queryWHEREBookIdTemplate = " AND b.${bookId} = :bookId";
+            Map<String,Object> templateValues = new HashMap<>();
+            templateValues.put("Object", BooksPurchased.class.getName());
+            templateValues.put("id", BooksPurchased.Fields.user + ".id");
+            templateValues.put("bookId", BooksPurchased.Fields.books + ".id");
+            queryString = generateQueryString(queryFromTemplate + queryWHERETemplate + queryWHEREBookIdTemplate,templateValues);
+
+            Map<String,Object> queryParam = new HashMap<>();
+            queryParam.put("id", userId);
+            queryParam.put("bookId", bookId);
+            return getHQLSingleQueryResultSet(queryString,queryParam);
+        }catch(Exception ex){
+            return "Invalid user id: "+ userId + " or book id: " + bookId;
         }
     }
     @Transactional

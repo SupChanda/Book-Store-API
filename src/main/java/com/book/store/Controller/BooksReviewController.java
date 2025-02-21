@@ -32,9 +32,9 @@ public class BooksReviewController {
         }
     }
     @PostMapping("/books-reviews")
-    public ResponseEntity<Object> addBooksReview(@RequestHeader int bookId, @RequestHeader int userId,@RequestHeader String comments){
+    public ResponseEntity<Object> addBooksReview(@RequestBody BooksReviewRequest booksReviewRequest){
         try{
-            return new ResponseEntity<>(this.booksReviewService.addBooksReview(bookId,userId,comments), HttpStatus.OK);
+            return new ResponseEntity<>(this.booksReviewService.addBooksReview(booksReviewRequest), HttpStatus.OK);
         }catch(Exception ex){
             return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
         }

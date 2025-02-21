@@ -76,6 +76,14 @@ public class BooksPurchaseServiceImpl extends GenericDaoImpl<BooksPurchaseDao> i
         //System.out.println("booksDao.getPurchasedBooksDetails() " + booksDao.getPurchasedBooksDetails());
 
     }
+    public Object getPurchasedBooksDetailsByUserIdAndBookId(int userId,int bookId) throws BadRequestException {
+        try{
+            System.out.println("in booksPurchased user and book Id service impl");
+            return booksPurchaseDao.getPurchasedBooksDetailsByUserIdAndBookId(userId,bookId);
+        }catch(Exception ex){
+            throw new BadRequestException(ex.getMessage());
+        }
+    }
     @Override
     @Transactional
     public String addBookPurchasedOrRentDetails(BooksPurchasedRequest booksPurchasedRequest) throws BadRequestException {
