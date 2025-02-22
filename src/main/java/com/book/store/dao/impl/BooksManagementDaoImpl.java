@@ -44,11 +44,7 @@ public class BooksManagementDaoImpl  extends GenericDaoImpl<Books> implements Bo
         templateValues.put("Books", Books.class.getName());
         System.out.println("BooksDTO.Fields.class.getName() " + Books.class.getName());
         queryString = generateQueryString(queryFromTemplate,templateValues);
-//        if(getHQLQueryResultSet(queryString) == null){
-//            throw new BadRequestException()
-//        }
         return getHQLQueryResultSet(queryString);
-
     }
 
     @Override
@@ -79,7 +75,6 @@ public class BooksManagementDaoImpl  extends GenericDaoImpl<Books> implements Bo
             if(!userDao.isUserAdmin(currentUser)){
                 throw new BadRequestException( currentUser + " is not an Admin User!");
             }
-            //System.out.println("in DAO Impl");
             Books books = booksMapper.toBooksFromDTO(booksDTO);
             saveOrUpdate(books);
         }catch(Exception ex){
@@ -91,11 +86,6 @@ public class BooksManagementDaoImpl  extends GenericDaoImpl<Books> implements Bo
     @Override
     public String updateBooks(BooksDTO booksDTO, String currentUser) throws BadRequestException {
 
-        //Boolean isAdminUser = userMapper.toDTO((BookUser) userDao.getUsrByUserName(currentUser)).getIsAdmin();
-        //System.out.println("Is Admin user ?: " + userDao.isUserAdmin(currentUser));
-//        if(!userDao.isUserAdmin(currentUser)){
-//            throw new BadRequestException( currentUser + " is not an Admin User!");
-//        }
         getBooksByIdOrName(String.valueOf(booksDTO.getId()));
 
         Map<String, Object> templateValues = new HashMap<>();
@@ -124,8 +114,6 @@ public class BooksManagementDaoImpl  extends GenericDaoImpl<Books> implements Bo
 
     @Override
     public String deleteBooks(int id, String currentUser) throws BadRequestException {
-
-        //getBooksByIdOrName(String.valueOf(id));
 
         Map<String, Object> templateValues = new HashMap<>();
         templateValues.put("Books", Books.class.getName());
