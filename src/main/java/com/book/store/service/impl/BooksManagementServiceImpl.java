@@ -17,11 +17,6 @@ import java.util.List;
 @Service
 public class BooksManagementServiceImpl implements BooksManagementService {
 
-//    @Autowired
-//    BooksRepository booksRepository;
-
-    //    @Autowired
-//    UserRepository userRepository;
     @Autowired
     BooksMapper booksMapper;
     @Autowired
@@ -33,9 +28,7 @@ public class BooksManagementServiceImpl implements BooksManagementService {
     public List<BooksDTO> getBooks() throws BadRequestException {
         List<Books> booksList = (List<Books>) booksManagementDao.getBooksList();
         return this.booksMapper.toDTOList(booksList);
-
     }
-
 
     public Object getBooksByIdOrName(Object obj) throws BadRequestException {
         try {
@@ -93,18 +86,14 @@ public class BooksManagementServiceImpl implements BooksManagementService {
     @Transactional
     public String deleteBooks(BooksRequest booksRequest, String currentUser) throws BadRequestException {
         try {
-            //System.out.println("user : " + currentUser);
             if (!userDao.isUserAdmin(currentUser)) {
                 throw new BadRequestException(currentUser + " is not an Admin User!");
             }
-            //System.out.println("guess");
             if (booksManagementDao.getBooksByIdOrName(booksRequest.getId()) == null) {
                 throw new BadRequestException("Invalid id: " + booksRequest.getId());
             }
-
             return booksManagementDao.deleteBooks(booksRequest.getId(), currentUser);
         } catch (Exception ex) {
-            System.out.println("hereeeee");
             throw new BadRequestException("Invalid id:" + booksRequest.getId());
         }
     }
