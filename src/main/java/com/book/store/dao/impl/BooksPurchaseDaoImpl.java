@@ -81,8 +81,8 @@ public class BooksPurchaseDaoImpl extends GenericDaoImpl<BooksPurchased> impleme
             return ex.getMessage();
         }
     }
-    public Object getPurchasedBooksDetailsById(int id){
-        try {
+    public BooksPurchased getPurchasedBooksDetailsById(int id) throws BadRequestException{
+        //try {
             Map<String,Object> templateValues = new HashMap<>();
             templateValues.put("Object", BooksPurchased.class.getName());
             templateValues.put("id", BooksPurchased.Fields.id);
@@ -91,13 +91,13 @@ public class BooksPurchaseDaoImpl extends GenericDaoImpl<BooksPurchased> impleme
 
             Map<String,Object> queryParam = new HashMap<>();
             queryParam.put("id", id);
-            return this.booksPurchasedMapper.toDTO((BooksPurchased) getHQLSingleQueryResultSet(queryString,queryParam));
+            return (BooksPurchased) getHQLSingleQueryResultSet(queryString,queryParam);
             //getHQLSingleQueryResultSet(queryString,queryParam);
 //            BooksPurchasedDTO booksPurchasedDTO = this.booksPurchasedMapper.toDTO(booksPurchased);
 //            return booksPurchasedDTO;
-        }catch(Exception ex){
-            return "Invalid id: "+ id;
-        }
+//        }catch(Exception ex){
+//            throw new BadRequestException("Invalid id: "+ id);
+//        }
     }
 
     public Object getPurchasedBooksDetailsByUserIdAndBookId(int userId,int bookId){

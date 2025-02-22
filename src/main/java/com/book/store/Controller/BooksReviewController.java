@@ -26,7 +26,7 @@ public class BooksReviewController {
     @GetMapping("/books-reviews/{bookId}")
     public ResponseEntity<Object> getBooksReviewByID(@PathVariable int bookId){
         try{
-            return new ResponseEntity<>(this.booksReviewService.getBooksReviewByID(bookId), HttpStatus.OK);
+            return new ResponseEntity<>(this.booksReviewService.getBooksReviewByBookId(bookId), HttpStatus.OK);
         }catch(Exception ex){
             return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
         }
