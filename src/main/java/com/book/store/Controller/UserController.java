@@ -44,9 +44,9 @@ public class UserController {
     @GetMapping("/user/name/{userName}")
     public ResponseEntity<Object> getUsersByUserName(@PathVariable String userName) throws BadRequestException {
         try{
-            UserDTO userDTO = userMapper.toDTO((BookUser) this.userService.getUsrByUserName(userName));
+            BookUser bookUser = this.userService.getUsrByUserName(userName);
             //System.out.println("in controller try");
-            return new ResponseEntity<>(userDTO,HttpStatus.OK);
+            return new ResponseEntity<>(bookUser,HttpStatus.OK);
             //return this.userService.getUsrByUserName(userName);
         }catch(Exception ex){
             //System.out.println("catch Controller:" + ex.getMessage());
@@ -57,9 +57,9 @@ public class UserController {
     @GetMapping("/user/id/{userId}")
     public ResponseEntity<Object> getUsersByUserID(@PathVariable Integer userId) throws BadRequestException {
         try{
-            UserDTO userDTO = userMapper.toDTO((BookUser) this.userService.getUsrByUserId(userId));
+            BookUser bookUser = (BookUser) this.userService.getUsrByUserId(userId);
             //System.out.println("in controller try");
-            return new ResponseEntity<>(userDTO,HttpStatus.OK);
+            return new ResponseEntity<>(bookUser,HttpStatus.OK);
         }catch(Exception ex){
             return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
         }

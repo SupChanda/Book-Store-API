@@ -24,7 +24,7 @@ public class UserDaoImpl extends GenericDaoImpl<BookUser> implements UserDao {
     @Autowired
     UserMapper userMapper;
 
-    String queryString;
+    private String queryString;
     private final String queryTemplateByUserName = "FROM ${User} b WHERE b.${userName} = :userName";
     private final String queryTemplateByUserId = "FROM ${User} b WHERE b.${id} = :userId";
 
@@ -33,18 +33,20 @@ public class UserDaoImpl extends GenericDaoImpl<BookUser> implements UserDao {
             "b.${isActiveMember} = :isActiveMember, b.${isAdmin} = :isAdmin WHERE b.${id} = :userId";
     private final String deleteQueryTemplate = "DELETE " + queryTemplateByUserId;
 
-
+    private Map<String, Object> templateValues;
+    private Map<String, Object> queryParams;
     @Override
     public Object getUsrByUserName(String userName) throws BadRequestException {
 
-        Map<String, Object> templateValues = new HashMap<>();
+        templateValues = new HashMap<>();
         templateValues.put("User", BookUser.class.getName());
         templateValues.put("userName", BookUser.Fields.userName);
 
-        Map<String, Object> queryParams = new HashMap<>();
+        queryParams = new HashMap<>();
         queryParams.put("userName", userName);
 
-        String queryString = generateQueryString(queryTemplateByUserName, templateValues);
+        queryString = generateQueryString(queryTemplateByUserName, templateValues);
+        System.out.println("yeeedd " + getHQLSingleQueryResultSet(queryString, queryParams));
         return getHQLSingleQueryResultSet(queryString, queryParams);
 
     }
@@ -52,54 +54,45 @@ public class UserDaoImpl extends GenericDaoImpl<BookUser> implements UserDao {
     @Override
     public Object getUsrByUserId(Integer userId) throws BadRequestException {
 
-        Map<String, Object> templateValues = new HashMap<>();
+        templateValues = new HashMap<>();
         templateValues.put("User", BookUser.class.getName());
         templateValues.put("id", BookUser.Fields.id);
 
-        Map<String, Object> queryParams = new HashMap<>();
+        queryParams = new HashMap<>();
         queryParams.put("userId", userId);
 
-        String queryString = generateQueryString(queryTemplateByUserId, templateValues);
+        queryString = generateQueryString(queryTemplateByUserId, templateValues);
         return getHQLSingleQueryResultSet(queryString, queryParams);
 
     }
 
     @Override
     public boolean isUserAdmin(String currentUser) throws BadRequestException {// should only interact with the service
-        //BookUser user = (BookUser) getUsrByUserName(currentUser);
-        Map<String, Object> templateValues = new HashMap<>();
+        templateValues = new HashMap<>();
         templateValues.put("User", BookUser.class.getName());
         templateValues.put("userName", BookUser.Fields.userName);
         templateValues.put("isAdmin", BookUser.Fields.isAdmin);
 
-        Map<String, Object> queryParams = new HashMap<>();
+        queryParams = new HashMap<>();
         queryParams.put("userName", currentUser);
 
-        String queryString = generateQueryString(queryTemplateByUserName, templateValues);
+        queryString = generateQueryString(queryTemplateByUserName, templateValues);
 
         BookUser user = (BookUser) getHQLSingleQueryResultSet(queryString, queryParams);
-//        if(!user.getIsAdmin() ){
-//            System.out.println("not admin");
-//            return false;
-//        }
-        System.out.println("admin");
         return user.getIsAdmin();
     }
 
     @Override
     public boolean addUser(String userName, UserRequest userRequest) {
-        //System.out.println("Yes Here");
-        Map<String, Object> templateValues = new HashMap<>();
+        templateValues = new HashMap<>();
         templateValues.put("User", BookUser.class.getName());
         templateValues.put("userName", BookUser.Fields.userName);
 
-        Map<String, Object> queryParams = new HashMap<>();
+        queryParams = new HashMap<>();
         queryParams.put("userName", userName);
 
-        String queryString = generateQueryString(queryTemplateByUserName, templateValues);
-        Long userCount = (long) getHQLQueryCount(queryString, queryParams);
-        //System.out.println("userCount: " + userCount);
-
+        queryString = generateQueryString(queryTemplateByUserName, templateValues);
+        Long userCount = (Long) getHQLQueryCount(queryString, queryParams);
         if (userCount == 0) {
             BookUser user = userMapper.toUserFromUserRequest(userRequest);
             saveOrUpdate(user);
@@ -111,7 +104,7 @@ public class UserDaoImpl extends GenericDaoImpl<BookUser> implements UserDao {
     @Override
     public void updateUser(Integer userId, UserRequest userRequest) throws BadRequestException {
 
-        Map<String, Object> templateValues = new HashMap<>();
+        templateValues = new HashMap<>();
         templateValues.put("User", BookUser.class.getName());
         templateValues.put("userName", BookUser.Fields.userName);
         templateValues.put("password", BookUser.Fields.password);
@@ -123,7 +116,7 @@ public class UserDaoImpl extends GenericDaoImpl<BookUser> implements UserDao {
 
         queryString = generateQueryString(updateQueryTemplate, templateValues);
 
-        Map<String, Object> queryParams = new HashMap<>();
+        queryParams = new HashMap<>();
         queryParams.put("userName", userRequest.getUserName());
         queryParams.put("password", userRequest.getPassword());
         queryParams.put("firstName", userRequest.getFirstName());
@@ -139,14 +132,12 @@ public class UserDaoImpl extends GenericDaoImpl<BookUser> implements UserDao {
 
     @Override
     public void deleteUser(Integer userId, String currentUser) throws BadRequestException {
-        //private final String deleteQueryTemplate = "DELETE FROM ${User} b WHERE b.${id} = :userId";
-        Map<String, Object> templateValues = new HashMap<>();
+        templateValues = new HashMap<>();
         templateValues.put("User", BookUser.class.getName());
         templateValues.put("id", BookUser.Fields.id);
-
         queryString = generateQueryString(deleteQueryTemplate, templateValues);
 
-        Map<String, Object> queryParams = new HashMap<>();
+        queryParams = new HashMap<>();
         queryParams.put("userId", userId);
 
         updateOrDeleteObject(queryString, queryParams);
