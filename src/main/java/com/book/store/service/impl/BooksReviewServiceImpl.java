@@ -6,22 +6,18 @@ import com.book.store.models.domain.BookUser;
 import com.book.store.models.domain.Books;
 import com.book.store.models.domain.BooksReview;
 import com.book.store.models.dto.BooksDTO;
-import com.book.store.models.dto.UserDTO;
 import com.book.store.models.mappers.BooksMapper;
 import com.book.store.models.mappers.BooksReviewMapper;
-import com.book.store.models.mappers.UserMapper;
 import com.book.store.service.BooksManagementService;
 import com.book.store.service.BooksPurchaseService;
 import com.book.store.service.BooksReviewService;
 import com.book.store.service.UserService;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Book;
+
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
@@ -29,8 +25,6 @@ import java.util.List;
 
 @Service
 public class BooksReviewServiceImpl implements BooksReviewService {
-    @Autowired
-    UserMapper userMapper;
     @Autowired
     UserService userService;
     @Autowired
@@ -60,7 +54,7 @@ public class BooksReviewServiceImpl implements BooksReviewService {
             //System.out.println("Books: " + books);
             Integer userId = booksReviewRequest.getUserId();
             BookUser user = (BookUser) userService.getUsrByUserId(userId);
-            //System.out.println("Users: " + user);
+
             return (String) booksReviewDao.addBookReview(booksReviewRequest,books,user);
         }catch(Exception ex){
             throw new BadRequestException(ex.getMessage());
@@ -71,7 +65,6 @@ public class BooksReviewServiceImpl implements BooksReviewService {
     public List<BooksReviewRequest> getBooksReview() throws BadRequestException { // return should be BookReview class
         try{
             return booksReviewMapper.toBooksReviewRequestListFromRequest(booksReviewDao.getBooksReview());
-            //return booksReviewDao.getBooksReview(); //booksReviewRequest; //booksReviewDao.getBooksReview();
         }catch(Exception ex){
             throw new BadRequestException(ex.getMessage());
         }
