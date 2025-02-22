@@ -30,13 +30,8 @@ import java.util.*;
 public class BooksPurchaseServiceImpl extends GenericDaoImpl<BooksPurchaseDao> implements BooksPurchaseService {
 
 
-
-    private int bookId;
-    private int userId;
     private int quantity = 0;
     private String transactionType;
-    private float purchasedPrice;
-    private float rentalFeeAccrued;
 
 
     @Autowired
@@ -46,10 +41,6 @@ public class BooksPurchaseServiceImpl extends GenericDaoImpl<BooksPurchaseDao> i
     @Autowired
     UserDao userDao;
     @Autowired
-    BooksRepository booksRepository;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
     BooksMapper booksMapper;
     @Autowired
     UserMapper userMapper;
@@ -57,18 +48,14 @@ public class BooksPurchaseServiceImpl extends GenericDaoImpl<BooksPurchaseDao> i
     @Override
     public Object getPurchasedBooksDetails() throws BadRequestException {
         try{
-            System.out.println("in booksPurchased service impl");
             return booksPurchaseDao.getAllPurchasedBooksDetails();
         }catch(Exception ex){
             throw new BadRequestException(ex.getMessage());
         }
-        //System.out.println("booksDao.getPurchasedBooksDetails() " + booksDao.getPurchasedBooksDetails());
-
     }
 
     public BooksPurchased getPurchasedBooksDetailsById(int id) throws BadRequestException {
         try{
-            System.out.println("in booksPurchased service impl");
             BooksPurchased booksPurchased = booksPurchaseDao.getPurchasedBooksDetailsById(id);
             if(booksPurchased == null){
                 throw new BadRequestException("Invalid id: " +id);
@@ -77,12 +64,9 @@ public class BooksPurchaseServiceImpl extends GenericDaoImpl<BooksPurchaseDao> i
         }catch(Exception ex){
             throw new BadRequestException(ex.getMessage());
         }
-        //System.out.println("booksDao.getPurchasedBooksDetails() " + booksDao.getPurchasedBooksDetails());
-
     }
     public Object getPurchasedBooksDetailsByUserIdAndBookId(int userId,int bookId) throws BadRequestException {
         try{
-            System.out.println("in booksPurchased user and book Id service impl");
             return booksPurchaseDao.getPurchasedBooksDetailsByUserIdAndBookId(userId,bookId);
         }catch(Exception ex){
             throw new BadRequestException(ex.getMessage());
@@ -144,14 +128,11 @@ public class BooksPurchaseServiceImpl extends GenericDaoImpl<BooksPurchaseDao> i
                 return "Invalid User Id: " + booksPurchasedDTO.getUserId();
             }
             booksPurchaseDao.UpdateBookDetailsOnReturn(booksPurchasedDTO);
-
-//        try{
-//
         }
         catch (Exception ex){
             return ex.getMessage();
         }
-        return "Book Id: " + booksPurchasedDTO.getBookId() + " has been returned"; //+ bookId + " is returned";
+        return "Book Id: " + booksPurchasedDTO.getBookId() + " has been returned";
         }
 
 }

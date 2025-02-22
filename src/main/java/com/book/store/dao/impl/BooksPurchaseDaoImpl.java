@@ -75,14 +75,12 @@ public class BooksPurchaseDaoImpl extends GenericDaoImpl<BooksPurchased> impleme
             System.out.println("in books Purchased dao impl");
             queryString = generateQueryString(queryFromTemplate,templateValues);
             return getHQLQueryResultSet(queryString);
-//            BooksPurchasedDTO booksPurchasedDTO = this.booksPurchasedMapper.toDTO(booksPurchased);
-//            return booksPurchasedDTO;
         }catch(Exception ex){
             return ex.getMessage();
         }
     }
     public BooksPurchased getPurchasedBooksDetailsById(int id) throws BadRequestException{
-        //try {
+
             Map<String,Object> templateValues = new HashMap<>();
             templateValues.put("Object", BooksPurchased.class.getName());
             templateValues.put("id", BooksPurchased.Fields.id);
@@ -92,12 +90,6 @@ public class BooksPurchaseDaoImpl extends GenericDaoImpl<BooksPurchased> impleme
             Map<String,Object> queryParam = new HashMap<>();
             queryParam.put("id", id);
             return (BooksPurchased) getHQLSingleQueryResultSet(queryString,queryParam);
-            //getHQLSingleQueryResultSet(queryString,queryParam);
-//            BooksPurchasedDTO booksPurchasedDTO = this.booksPurchasedMapper.toDTO(booksPurchased);
-//            return booksPurchasedDTO;
-//        }catch(Exception ex){
-//            throw new BadRequestException("Invalid id: "+ id);
-//        }
     }
 
     public Object getPurchasedBooksDetailsByUserIdAndBookId(int userId,int bookId){
@@ -154,7 +146,6 @@ public class BooksPurchaseDaoImpl extends GenericDaoImpl<BooksPurchased> impleme
 
         Boolean isActiveMember = user.getIsActiveMember();
 
-        System.out.println("Is Active Member?: " + isActiveMember);
         if ( !isActiveMember) {
             throw new BadRequestException( "User id: " + user.getId()+ " is not an active Member");
         }
@@ -167,7 +158,6 @@ public class BooksPurchaseDaoImpl extends GenericDaoImpl<BooksPurchased> impleme
 
 
         if(transactionType.equalsIgnoreCase("Rented")) {
-            System.out.println("Inside checking whether the member has already rented 2 books: ");
             queryTemplate = queryFromTemplate + queryWHERETemplate;
             queryTemplate += " AND b.${rentalStartDate} IS NULL AND b.${transactionType} =: transactionType";
 
@@ -182,8 +172,6 @@ public class BooksPurchaseDaoImpl extends GenericDaoImpl<BooksPurchased> impleme
             queryParam.put("id",userDTO.getId());
             queryParam.put("transactionType",transactionType.toLowerCase());
             Long booksRentCount = (Long) getHQLQueryCount(queryString,queryParam);
-
-            System.out.println("booksRentCount: " + booksRentCount);
 
             if (booksRentCount > 1) {
                 System.out.println("booksRentCount > 1");
@@ -213,19 +201,16 @@ public class BooksPurchaseDaoImpl extends GenericDaoImpl<BooksPurchased> impleme
             templateValues.put("noOfCopies",Books.Fields.noOfCopies);
             templateValues.put("id",Books.Fields.id);
 
-            //queryString = generateQueryString(updateQueryTemplate,templateValues);
-            queryParam = new HashMap<>();//noOfCopies
+            queryParam = new HashMap<>();
             queryParam.put("noOfCopies",booksDTO.getNoOfCopies()-booksRentCount);
             queryParam.put("id",booksDTO.getId());
 
             updateOrDeleteObject(generateQueryString(UpdateBookNoOfCopiesTemplate,templateValues),queryParam);
-            //String UpdateBookRecordSql = "UPDATE Book_Record SET noOfCopies = :noOfCopies WHERE ID = :ID";
 
     // Checking whether the member has already rented 2 books : END ***************************************
 
     // Purchased Book Logic  : START ***************************************
         }else{
-            System.out.println("Inside checking how many times the book is purchased: ");
             queryTemplate = queryFromTemplate + queryWHERETemplate;
             queryTemplate += " AND b.${transactionType} = :transactionType";
 
@@ -279,7 +264,6 @@ public class BooksPurchaseDaoImpl extends GenericDaoImpl<BooksPurchased> impleme
     @Transactional
     public void UpdateBookDetailsOnReturn(BooksPurchasedDTO booksPurchasedDTO) throws BadRequestException {
         try {
-            //UpdateBookRecordTemplate = "UPDATE ${BookRecord} b SET b.${noOfCopies} = :noOfCopies" + queryWHERETemplate;
             if(booksPurchasedDTO.getTransactionType().equalsIgnoreCase("purchased")){
                 throw new BadRequestException("User id: "+ booksPurchasedDTO.getUserId() + " cannot return because he/she has purchased the book id: " + booksPurchasedDTO.getBookId());
             }
@@ -294,9 +278,7 @@ public class BooksPurchaseDaoImpl extends GenericDaoImpl<BooksPurchased> impleme
 
             queryParam = new HashMap<>();//noOfCopies
             queryParam.put("id",booksPurchasedDTO.getBookId());
-            System.out.println("yyyyyyyyyyyyyyyy");
             int noOfCopies =  ((Books) getHQLSingleQueryResultSet(queryString,queryParam)).getNoOfCopies();
-            System.out.println("no of copies " + noOfCopies);
 
             //We got number of copies
 
@@ -350,81 +332,9 @@ public class BooksPurchaseDaoImpl extends GenericDaoImpl<BooksPurchased> impleme
             System.out.println("rentalEndDate: " +rentalEndDate);
             updateOrDeleteObject(queryString,queryParam);
 
-
-
-//            String queryString;
-//            float extraRentalFee = 0.00f;
-//            float rentalFeeAccrued = 0.00f;
-//            int quantity = 0;
-//
-//            //System.out.println("yes here");
-//
-//            //UPDATE RETURNED RENTED BOOK PURCHASE RECORD ONLY AND REJECT IF THE RETURNING BOOK IS PURCHASED
-//
-//            queryString = "SELECT RentalStartDate,RentalFeeAccrued,Quantity,TransactionType FROM Books_Purchased " + whereClause; //b.RentalStartDate,b.RentalFeeAccrued
-//            Query query = entityManager.createNativeQuery(queryString);
-//            query.setParameter("bookId", bookId);
-//            query.setParameter("userId", userId);
-//            query.setParameter("transactionType", "Rented");
-//            List<Object[]> resultSet = query.getResultList();
-//            for (Object[] res : resultSet) {
-//                //System.out.println("here " + res[3]);
-//                if(res[3].equals("Purchased")){
-//                    throw new BadRequestException("The book cannot be returned as it is purchased and not rented.");
-//                }
-//                rentalStartDate = (Date) res[0];
-//                rentalFeeAccrued = ((Number) res[1]).floatValue();
-//                quantity = (int) (res[2]);
-//            }
-//            //System.out.println("Rental Start date: " + rentalStartDate + " extraRentalFee: " + extraRentalFee);
-//
-//            long datediff = ChronoUnit.DAYS.between(rentalStartDate.toLocalDate(), today.toLocalDate());
-//            System.out.println("Period: " + datediff);
-//            if (datediff > 30) {
-//                extraRentalFee = rentalFeeAccrued + datediff - 30;
-//            }
-//
-//            //System.out.println("extraRentalFee: " + extraRentalFee);
-//
-//            queryString = "UPDATE Books_Purchased  SET RentalEndDate = :rentalEndDate, RentalFeeAccrued = :rentalFeeAccrued " + whereClause;
-//            query = entityManager.createNativeQuery(queryString);
-//            query.setParameter("rentalEndDate", rentalEndDate);
-//            query.setParameter("rentalFeeAccrued", extraRentalFee);
-//            query.setParameter("bookId", bookId);
-//            query.setParameter("userId", userId);
-//            query.setParameter("transactionType", "Rented");
-//            query.executeUpdate();
-//
-//            //UPDATE BOOK COPIES RECORD
-//            int noOfCopies = 0;
-//            queryString = "SELECT NoOfCopies FROM Book_Record WHERE ID = :bookId ";
-//            query = entityManager.createNativeQuery(queryString);
-//            query.setParameter("bookId", bookId);
-//            System.out.println("yes here: ");
-//            List<Object> resultSet1 = query.getResultList();
-//            for (Object res : resultSet1) {
-//                noOfCopies = (int) res;
-//            }
-//            System.out.println("no of copies: " + noOfCopies);
-//            queryString = "UPDATE Book_Record  SET NoOfCopies = :noOfCopies WHERE ID = :bookId";
-//            query = entityManager.createNativeQuery(queryString);
-//            query.setParameter("bookId", bookId);
-//            query.setParameter("noOfCopies", quantity + noOfCopies);
-//            query.executeUpdate();
         }
         catch(Exception ex){
             throw new BadRequestException(ex.getMessage());
         }
     }
 }
-
-//                String quantityCheckQuery = "SELECT COUNT(*) FROM Books_Purchased WHERE UserId = :userId AND RentalEndDate IS NULL AND TransactionType = :transactionType"; //totalBookRentedQueryString
-//                query = entityManager.createNativeQuery(quantityCheckQuery);
-//                query.setParameter("userId", userId);
-//                query.setParameter("transactionType", "Rented");
-//                int quantityCheck = (int) query.getSingleResult();
-//                if (query.getSingleResult() == null) { // get single result in one query
-//                    quantityCheck = 0;
-//                } else {
-//                    quantityCheck = (int) query.getSingleResult();
-//                }
