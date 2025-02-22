@@ -26,15 +26,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserDao userDao;
-
-    //@Autowired
-//    public UserServiceImpl(UserDao userDao,UserMapper userMapper){
-//        this.userDao = userDao;
-//        this.userMapper = userMapper;
-//    }
-
-
-
     public List<BookUser> getUsrList() {
             return userRepository.findAll();
     }
@@ -60,12 +51,12 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public String addUser(UserRequest userRequest) throws BadRequestException {
         try{
-        String userName = userRequest.getUserName();
-        boolean userAdded = userDao.addUser(userName, userRequest);
-        if(userAdded){
-            return userName + " user record has been added";
-        }
-        return "The username " + userName + " is already present.";
+            String userName = userRequest.getUserName();
+            boolean userAdded = userDao.addUser(userName, userRequest);
+            if(userAdded){
+                return userName + " user record has been added";
+            }
+            return "The username " + userName + " is already present.";
         }catch(Exception ex){
             return ex.getMessage();
         }
@@ -75,18 +66,12 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public String updateUser(UserRequest userRequest, String currentUser) throws BadRequestException {
         try {
-            String userName = userRequest.getUserName();//user request username
+            String userName = userRequest.getUserName();
             int userId = userRequest.getId();
             boolean isAdminUser = userDao.isUserAdmin(currentUser);
-//            if (!isAdminUser) {
-//                throw new BadRequestException("Invalid Admin user: " + currentUser + "!");
-//            }
-
-            //UserDTO adminUserFound = userMapper.toDTO((BookUser) userDao.getUsrByUserName(currentUser));
             UserDTO userNameFound = userMapper.toDTO((BookUser) userDao.getUsrByUserId(userId));
 
             if (isAdminUser || userRequest.getUserName().equalsIgnoreCase(currentUser)) {
-                //System.out.println("Is current user admin? : " + adminUserFound.getIsAdmin());
                 userDao.updateUser(userId, userRequest);
                 return currentUser + " updated " + userName + " record";
             }else {
@@ -102,13 +87,10 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public String deleteUser(int userId, String currentUser) throws BadRequestException {
         try {
-            System.out.println(" In delete user service impl");
-            Integer userIdFound = userMapper.toDTO((BookUser) userDao.getUsrByUserId(userId)).getId();
-            System.out.println("userIdFound " + userIdFound);
-            UserDTO isAdminUser = userMapper.toDTO((BookUser) userDao.getUsrByUserName(currentUser));
-            System.out.println("isAdminUser.getId() " + isAdminUser.getId());
-            System.out.println("userDao.isUserAdmin(currentUser) " + userDao.isUserAdmin(currentUser));
             boolean userIdMatch=false;
+            Integer userIdFound = userMapper.toDTO((BookUser) userDao.getUsrByUserId(userId)).getId();
+            UserDTO isAdminUser = userMapper.toDTO((BookUser) userDao.getUsrByUserName(currentUser));
+
             if(isAdminUser.getId().equals(userIdFound)|| userDao.isUserAdmin(currentUser) ){
                 userIdMatch = true;
             }

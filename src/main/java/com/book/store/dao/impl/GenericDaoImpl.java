@@ -27,21 +27,12 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
         }
         Session session = getSession();
         session.saveOrUpdate(entity);
-        //session.merge(entity);
-        // session.flush();
-//        session.clear();
     }
 
     @Override
     @Transactional
     public void updateOrDeleteObject(String queryString, Map<String,Object> queryParams ){
 
-//        Transaction transaction = null;
-//        if(getSession().getTransaction().isActive()){
-//            transaction = getSession().getTransaction();
-//        }else{
-//            transaction = getSession().beginTransaction();
-//        }
         query = getSession().createQuery(queryString);
         String finalQueryString = queryString;
         for (Map.Entry<String, Object> queryLoop : queryParams.entrySet()) {
@@ -50,10 +41,6 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
         }
         System.out.println("query " + finalQueryString);
         query.executeUpdate();
-        //transaction.commit();
-
-
-        //T entityDB = session.get(entityClass,entityId);
     }
 
     public String generateQueryString(String queryTemplate, Map<String, Object> templateValues){
@@ -74,7 +61,6 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
             finalQueryString = finalQueryString.replace(":" + queryLoop.getKey(), queryLoop.getValue().toString());
         }
         System.out.println("finalQueryString " + finalQueryString);
-        //System.out.println("query.getSingleResult() " + query.getSingleResult());
         try {
             return query.getSingleResult();
         }catch(NoResultException ex){
@@ -89,7 +75,6 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
             finalQueryString = finalQueryString.replace(":" + queryLoop.getKey(), queryLoop.getValue().toString());
         }
         System.out.println("finalQueryString " + finalQueryString);
-        //System.out.println("query.getSingleResult() " + query.getSingleResult());
         try {
             return query.getResultList();
         }catch(NoResultException ex){
@@ -107,12 +92,7 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
             query.setParameter(queryLoop.getKey(),queryLoop.getValue());
             finalQueryString = finalQueryString.replace(":" + queryLoop.getKey(), queryLoop.getValue().toString());
         }
-        //System.out.println("finalQueryString: " + finalQueryString);
-//        System.out.println(query.getSingleResult());
         return query.getSingleResult();
     }
-
-
-
 
 }
