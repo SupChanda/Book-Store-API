@@ -19,8 +19,6 @@ import java.util.Map;
 
 @Repository
 public class UserDaoImpl extends GenericDaoImpl<BookUser> implements UserDao {
-    @PersistenceContext
-    EntityManager entityManager;
     @Autowired
     UserMapper userMapper;
 
@@ -46,7 +44,6 @@ public class UserDaoImpl extends GenericDaoImpl<BookUser> implements UserDao {
         queryParams.put("userName", userName);
 
         queryString = generateQueryString(queryTemplateByUserName, templateValues);
-        System.out.println("yeeedd " + getHQLSingleQueryResultSet(queryString, queryParams));
         return getHQLSingleQueryResultSet(queryString, queryParams);
 
     }
@@ -67,7 +64,7 @@ public class UserDaoImpl extends GenericDaoImpl<BookUser> implements UserDao {
     }
 
     @Override
-    public boolean isUserAdmin(String currentUser) throws BadRequestException {// should only interact with the service
+    public boolean isUserAdmin(String currentUser) throws BadRequestException {
         templateValues = new HashMap<>();
         templateValues.put("User", BookUser.class.getName());
         templateValues.put("userName", BookUser.Fields.userName);
