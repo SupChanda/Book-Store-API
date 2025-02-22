@@ -24,14 +24,12 @@ public class BooksPurchaseController {
             System.out.println(" In Books Purchased Controller");
             return new ResponseEntity<>(this.booksPurchaseService.getPurchasedBooksDetails(), HttpStatus.OK);
         }catch(Exception ex){
-            //throw new BadRequestException(ex.getMessage());
             return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
     @GetMapping("/books-transaction/{id}")
     public Object getPurchasedBooksDetails(@PathVariable int id) throws BadRequestException {//TO DO: Delete the underscore
         try{
-            System.out.println(" In Books Purchased Controller");
             return new ResponseEntity<>(this.booksPurchaseService.getPurchasedBooksDetailsById(id), HttpStatus.OK);
         }catch(Exception ex){
             //throw new BadRequestException(ex.getMessage());
