@@ -47,10 +47,10 @@ public class BooksRecommendationDaoImpl extends GenericDaoImpl<Books> implements
             templateValues.put("orderBy1", Books.Fields.genre);
             templateValues.put("orderBy2", Books.Fields.genre);
             queryString = generateQueryString(GenrePurchasedQuery,templateValues);
-            System.out.println("yes in recom dao");
+
             queryParams.put("userId",userId);
             List<Object> resultList = (List<Object>) getHQLFullQueryResultSet(queryString,queryParams);
-            System.out.println("resultList " + resultList);
+
             if ( resultList == null) {
                 throw new BadRequestException(" User with userid " + userId + " have not yet bought a book");
             }
@@ -67,18 +67,15 @@ public class BooksRecommendationDaoImpl extends GenericDaoImpl<Books> implements
             templateValues.put("genre",Books.Fields.genre);
             templateValues.put("title",Books.Fields.title);
             queryString = generateQueryString(recommendedBookListQuery,templateValues);
-    //Comedy 2 Drama 1
+
 
             for (String genre : GenreVsCount.keySet()) {
-                System.out.println("genre is "+ genre);
                 queryParams.put("genre",genre);
                 List<Books> genreList = (List<Books>)getHQLFullQueryResultSet(queryString,queryParams);
-                //System.out.println("genrelist");
                 for(Object obj: genreList){
                     Books itemSet = (Books) obj;
                     bookList.add(itemSet);
                 }
-                //queryParams.clear();
             }
         }catch (Exception ex){
             throw new BadRequestException(ex.getMessage());
