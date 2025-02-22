@@ -39,17 +39,19 @@ public class UserServiceImpl implements UserService {
             return userRepository.findAll();
     }
     @Override
-    public Object getUsrByUserName(String userName) throws BadRequestException {
+    public BookUser getUsrByUserName(String userName) throws BadRequestException {
         try {
-            return userDao.getUsrByUserName(userName);
+
+            return (BookUser)userDao.getUsrByUserName(userName);
         } catch (Exception ex) {
+            System.out.println("getUsrByUserId service impl");
             throw new BadRequestException("Invalid Username: " + userName);
         }
     }
     @Override
-    public Object getUsrByUserId(Integer userId) throws BadRequestException {
+    public BookUser getUsrByUserId(Integer userId) throws BadRequestException {
         try {
-            return userDao.getUsrByUserId(userId);
+            return (BookUser)userDao.getUsrByUserId(userId);
         } catch (Exception ex) {
             throw new BadRequestException("Invalid UserId: " + userId);
         }
