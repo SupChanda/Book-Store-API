@@ -66,10 +66,14 @@ public class BooksPurchaseServiceImpl extends GenericDaoImpl<BooksPurchaseDao> i
 
     }
 
-    public Object getPurchasedBooksDetailsById(int id) throws BadRequestException {
+    public BooksPurchased getPurchasedBooksDetailsById(int id) throws BadRequestException {
         try{
             System.out.println("in booksPurchased service impl");
-            return booksPurchaseDao.getPurchasedBooksDetailsById(id);
+            BooksPurchased booksPurchased = booksPurchaseDao.getPurchasedBooksDetailsById(id);
+            if(booksPurchased == null){
+                throw new BadRequestException("Invalid id: " +id);
+            }
+            return booksPurchased;
         }catch(Exception ex){
             throw new BadRequestException(ex.getMessage());
         }

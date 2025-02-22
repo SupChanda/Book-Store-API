@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class BooksRecommendationController {
-    //@Autowired
+    @Autowired
     BooksRecommendationService booksRecommendationService;
     @GetMapping("/books-recommendation/{userId}")
     public ResponseEntity<Object> getBooksReview(@PathVariable int userId){

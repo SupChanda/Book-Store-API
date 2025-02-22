@@ -13,5 +13,5 @@ import java.util.List;
 public interface BooksReviewDao {
     Object addBookReview(BooksReviewRequest booksReviewRequest, Books books, BookUser bookUser) throws BadRequestException;
     List<BooksReview> getBooksReview();
-    List<BooksReview> getBooksReviewById(int BookId);
+    List<BooksReview> getBooksReviewByBookId(int BookId);
 }

@@ -11,7 +11,7 @@ import java.util.List;
 public interface BooksPurchaseDao {
 
     Object getAllPurchasedBooksDetails();
-    Object getPurchasedBooksDetailsById(int id);
+    BooksPurchased getPurchasedBooksDetailsById(int id) throws BadRequestException;
     Object getPurchasedBooksDetailsByUserIdAndBookId(int userId,int bookId);
     void addBookPurchasedOrRentDetails(BooksDTO booksDTO, UserDTO userDTO,String transactionType,int quantity) throws BadRequestException;
     void UpdateBookDetailsOnReturn(BooksPurchasedDTO booksPurchasedDTO) throws BadRequestException;

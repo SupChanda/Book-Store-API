@@ -68,7 +68,7 @@ public class BooksReviewServiceImpl implements BooksReviewService {
     }
 
     @Override
-    public Object getBooksReview() throws BadRequestException {
+    public List<BooksReviewRequest> getBooksReview() throws BadRequestException { // return should be BookReview class
         try{
             return booksReviewMapper.toBooksReviewRequestListFromRequest(booksReviewDao.getBooksReview());
             //return booksReviewDao.getBooksReview(); //booksReviewRequest; //booksReviewDao.getBooksReview();
@@ -78,9 +78,9 @@ public class BooksReviewServiceImpl implements BooksReviewService {
     }
 
     @Override
-    public List<BooksReview> getBooksReviewByID(int bookId) throws BadRequestException {
+    public List<BooksReview> getBooksReviewByBookId(int bookId) throws BadRequestException {
         try{
-            return booksReviewDao.getBooksReviewById(bookId);
+            return booksReviewDao.getBooksReviewByBookId(bookId);
         }catch(Exception ex){
             throw new BadRequestException(ex.getMessage());
         }

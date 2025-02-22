@@ -43,7 +43,7 @@ public class BooksReviewDaoImpl extends GenericDaoImpl<BooksReview> implements B
         return (List<BooksReview>) getHQLQueryResultSet(queryString);
     }
 
-    public List<BooksReview> getBooksReviewById(int bookId){
+    public List<BooksReview> getBooksReviewByBookId(int bookId){
 
         //Map<String,Object> templateValues = new HashMap<>();
         templateValues.put("Object", BooksReview.class.getName());
@@ -91,7 +91,7 @@ public class BooksReviewDaoImpl extends GenericDaoImpl<BooksReview> implements B
         if((long)getHQLQueryCount(queryString,queryParam) > 0){
             throw new BadRequestException("The user -> UserID = " + booksReviewRequest.getBookId() + " has already reviewed the book -> BookID = " + booksReviewRequest.getBookId());
         }
-
+        // make these book set and user set changes in service layer
         BooksReview booksReview = booksReviewMapper.toBooksReviewFromRequest(booksReviewRequest);
         booksReview.setBooks(books);
         booksReview.setUser(bookUser);

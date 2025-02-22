@@ -78,12 +78,12 @@ public class UserServiceImplTest {
         when(userService.getUsrByUserName(bookUser.getUserName())).thenReturn(bookUser.getUserName());
 
         String userName = (String) userService.getUsrByUserName(bookUser.getUserName());
-        assertEquals("Admin",userName);
+        assertEquals("admin",userName);
 
 
     }
     @Test
-    public void getUsrByUserNameIDTest() throws BadRequestException {
+    public void getUsrByUserIDTest() throws BadRequestException {
         BookUser bookUser = Generators.generateTestUser();
         when(userService.getUsrByUserId(bookUser.getId())).thenReturn(bookUser.getId());
 

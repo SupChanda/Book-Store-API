@@ -10,5 +10,5 @@ public interface BooksReviewService {
 
     String addBooksReview(BooksReviewRequest booksReviewRequest) throws BadRequestException;
     Object getBooksReview() throws BadRequestException;
-    List<BooksReview> getBooksReviewByID(int bookId) throws  BadRequestException;
+    List<BooksReview> getBooksReviewByBookId(int bookId) throws  BadRequestException;
 }
