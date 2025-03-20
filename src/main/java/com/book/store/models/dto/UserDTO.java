@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 @Data
 @FieldNameConstants
+@Builder
 public class UserDTO {
 
     private Integer id;
