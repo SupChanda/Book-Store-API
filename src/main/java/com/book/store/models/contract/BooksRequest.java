@@ -9,6 +9,7 @@ import lombok.experimental.FieldNameConstants;
 @NoArgsConstructor
 @Data
 @FieldNameConstants
+@Builder
 public class BooksRequest {
 
     private Integer id;

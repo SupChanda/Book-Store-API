@@ -12,6 +12,7 @@ import java.time.*;
 @NoArgsConstructor
 @Data
 @FieldNameConstants
+@Builder
 public class BooksDTO {
 
     private Integer id;

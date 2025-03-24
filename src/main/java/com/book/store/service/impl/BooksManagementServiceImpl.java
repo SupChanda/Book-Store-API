@@ -29,6 +29,13 @@ public class BooksManagementServiceImpl implements BooksManagementService {
         List<Books> booksList = (List<Books>) booksManagementDao.getBooksList();
         return this.booksMapper.toDTOList(booksList);
     }
+    public Object getBooksById(Object obj) throws BadRequestException {
+        try {
+            return this.booksMapper.toDTO((Books) booksManagementDao.getBooksById(obj));
+        } catch (Exception ex) {
+            throw new BadRequestException("Invalid id: " + obj);
+        }
+    }
 
     public Object getBooksByIdOrName(Object obj) throws BadRequestException {
         try {

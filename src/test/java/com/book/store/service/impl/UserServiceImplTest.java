@@ -1,33 +1,6 @@
 package com.book.store.service.impl;
-//
-//import com.book.store.Repository.UserRepository;
-//import com.book.store.dao.GenericDao;
-//import com.book.store.dao.UserDao;
-//import com.book.store.dao.impl.GenericDaoImpl;
-//import com.book.store.dao.impl.UserDaoImpl;
-//import com.book.store.helpers.Generators;
-//import com.book.store.models.contract.UserRequest;
-//import com.book.store.models.domain.BookUser;
-//import com.book.store.models.dto.UserDTO;
-//import com.book.store.models.mappers.UserMapper;
-//import com.book.store.service.UserService;
-//import jakarta.persistence.EntityManager;
-//import org.apache.coyote.BadRequestException;
-//import org.junit.Test;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.extension.ExtendWith;
-import com.book.store.Controller.UserController;
-import org.junit.runner.RunWith;
-//import org.mockito.InjectMocks;
-//import org.mockito.Mock;
-//import org.mockito.MockitoAnnotations;
-//import org.mockito.Spy;
-import org.mockito.junit.MockitoJUnitRunner;
-//import org.mockito.junit.jupiter.MockitoExtension;
 
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 import com.book.store.Repository.UserRepository;

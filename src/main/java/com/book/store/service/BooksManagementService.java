@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import java.util.List;
 public interface BooksManagementService {
     List<BooksDTO> getBooks() throws BadRequestException;
+    Object getBooksById(Object obj) throws BadRequestException;
     Object getBooksByIdOrName(Object obj) throws BadRequestException;
 
     String createBooks(BooksDTO booksDTO, String currentUser) throws BadRequestException;

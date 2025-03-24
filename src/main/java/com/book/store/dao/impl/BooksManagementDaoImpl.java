@@ -46,6 +46,22 @@ public class BooksManagementDaoImpl  extends GenericDaoImpl<Books> implements Bo
         queryString = generateQueryString(queryFromTemplate,templateValues);
         return getHQLQueryResultSet(queryString);
     }
+    @Override
+    public Object getBooksById(Object obj) throws BadRequestException {// What if the book name is 1984? taken care of on line 59
+
+        Map<String,Object> templateValues = new HashMap<>();
+        templateValues.put("Books", Books.class.getName());
+        templateValues.put("userNameOrID", Books.Fields.id);
+
+        queryTemplate = queryFromTemplate + queryWhereTemplate;
+        queryString = generateQueryString(queryTemplate,templateValues);
+
+
+        Map<String,Object> queryParams = new HashMap<>();
+        queryParams.put("userNameOrID",obj);
+
+        return getHQLSingleQueryResultSet(queryString,queryParams);
+    }
 
     @Override
     public Object getBooksByIdOrName(Object obj) throws BadRequestException {// What if the book name is 1984? taken care of on line 59

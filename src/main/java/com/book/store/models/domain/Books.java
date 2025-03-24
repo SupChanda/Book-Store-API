@@ -14,6 +14,7 @@ import java.time.*;
 @NoArgsConstructor
 @Data
 @FieldNameConstants
+@Builder
 public class Books {
 
     @Id

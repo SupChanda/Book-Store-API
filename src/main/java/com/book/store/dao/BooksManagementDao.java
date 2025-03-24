@@ -7,6 +7,7 @@ import org.apache.coyote.BadRequestException;
 public interface BooksManagementDao {
 
     Object getBooksList() throws BadRequestException;
+    Object getBooksById(Object obj) throws BadRequestException;
     Object getBooksByIdOrName(Object obj) throws BadRequestException;
 
     boolean createBooks(BooksDTO booksDTO, String currentUser) throws BadRequestException;
