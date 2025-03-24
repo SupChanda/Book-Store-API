@@ -29,9 +29,9 @@ public class BooksManagementController {
         }
     }
     @GetMapping("/books/{idOrName}") //Let's use by ID as well
-    public ResponseEntity<Object> getBooksById(@PathVariable Object idOrName) throws BadRequestException {
+    public ResponseEntity<Object> getBooksById(@PathVariable Object id) throws BadRequestException {
         try{
-            return new ResponseEntity<>(this.booksManagementService.getBooksByIdOrName(idOrName),HttpStatus.OK);
+            return new ResponseEntity<>(this.booksManagementService.getBooksById(id),HttpStatus.OK);
         }catch(Exception ex){
             return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
         }
