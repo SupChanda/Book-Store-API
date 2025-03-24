@@ -80,7 +80,7 @@ public class BooksManagementServiceImpl implements BooksManagementService {
             }
             if (!userDao.isUserAdmin(currentUser)) {
                 throw new BadRequestException(currentUser + " is not an Admin User!");
-            } else if (booksManagementDao.getBooksByIdOrName(booksDTO.getId()) == null) {
+            } else if (booksManagementDao.getBooksById(booksDTO.getId()) == null) {
                 throw new BadRequestException("Invalid id: " + booksDTO.getId());
             }
             return booksManagementDao.updateBooks(booksDTO, currentUser);
@@ -96,7 +96,7 @@ public class BooksManagementServiceImpl implements BooksManagementService {
             if (!userDao.isUserAdmin(currentUser)) {
                 throw new BadRequestException(currentUser + " is not an Admin User!");
             }
-            if (booksManagementDao.getBooksByIdOrName(booksRequest.getId()) == null) {
+            if (booksManagementDao.getBooksById(booksRequest.getId()) == null) {
                 throw new BadRequestException("Invalid id: " + booksRequest.getId());
             }
             return booksManagementDao.deleteBooks(booksRequest.getId(), currentUser);

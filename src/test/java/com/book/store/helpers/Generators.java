@@ -1,5 +1,6 @@
 package com.book.store.helpers;
 
+import com.book.store.models.contract.BooksRequest;
 import com.book.store.models.contract.UserRequest;
 import com.book.store.models.domain.BookUser;
 import com.book.store.models.domain.Books;
@@ -104,15 +105,9 @@ public class Generators {
 
     }
 
-    public static Books generateTestBooksRequest(){
-        return Books.builder()
+    public static BooksRequest generateTestBooksRequest(){
+        return BooksRequest.builder()
                 .id(1)
-                .title("Fight")
-                .author("Admin")
-                .genre("Action")
-                .price(35)
-                .rentalFee(4)
-                .noOfCopies(2)
                 .build();
 
 

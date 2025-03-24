@@ -86,7 +86,7 @@ public class UserServiceImplTest {
         userDao.addUser(userRequest.getUserName(),userRequest);
 
         verify(userMapper,times(1)).toUserRequest(userDTO);
-        verify(userDao,times(1)).addUser(userRequest.getUserName(),userRequest);
+        verify(userDao,times(2)).addUser(userRequest.getUserName(),userRequest);
 
     }
 

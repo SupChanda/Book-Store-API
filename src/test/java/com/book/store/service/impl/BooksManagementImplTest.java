@@ -2,14 +2,17 @@ package com.book.store.service.impl;
 
 import com.book.store.dao.BooksManagementDao;
 import com.book.store.dao.BooksPurchaseDao;
+import com.book.store.dao.UserDao;
 import com.book.store.helpers.Generators;
 import com.book.store.models.contract.BooksPurchasedRequest;
 import com.book.store.models.contract.BooksRequest;
+import com.book.store.models.domain.BookUser;
 import com.book.store.models.domain.Books;
 import com.book.store.models.dto.BooksDTO;
 import com.book.store.models.dto.BooksPurchasedDTO;
 import com.book.store.models.mappers.BooksMapper;
 import com.book.store.models.mappers.BooksPurchasedMapper;
+import org.apache.catalina.User;
 import org.apache.coyote.BadRequestException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,7 +39,7 @@ public class BooksManagementImplTest {
     @Mock
     BooksMapper booksMapper;
     @Mock
-    Books books;
+    UserDao userDao;
 
     @InjectMocks
     BooksManagementServiceImpl booksManagementService;
@@ -65,18 +68,69 @@ public class BooksManagementImplTest {
     }
 
     @Test
-    public void getBooksByIdOrNameTest() throws BadRequestException {
+    public void getBooksByIdTest() throws BadRequestException {
         Books books1 = Generators.generateTestBooks1();
         BooksDTO booksDTO1 = Generators.generateTestBooksDTO1();
+        when(booksManagementDao.getBooksById(books1.getId())).thenReturn(books1);
+        when(booksMapper.toDTO(books1)).thenReturn(booksDTO1);
 
-        when(booksManagementDao.getBooksByIdOrName(books1.getTitle())).thenReturn(books1.getTitle());
+        booksManagementService.getBooksById(books1.getId());
 
-        booksManagementService.getBooksByIdOrName(books1.getTitle());
-
-        verify(booksManagementDao,times(1)).getBooksByIdOrName(books1.getTitle());
+        verify(booksManagementDao,times(1)).getBooksById(books1.getId());
         verify(booksMapper,times(1)).toDTO(books1);
 
     }
 
+    @Test
+    public void createBooksTest() throws BadRequestException {
+        BookUser user = Generators.generateTestUser();
+        BooksDTO booksDTO1 = Generators.generateTestBooksDTO1();
+        when(userDao.getUsrByUserName(user.getUserName())).thenReturn(user);
+        when(userDao.isUserAdmin(user.getUserName())).thenReturn(true);
+        when(booksManagementDao.createBooks(booksDTO1,user.getUserName())).thenReturn(true);
+
+        booksManagementService.createBooks(booksDTO1,user.getUserName());
+
+        verify(userDao,times(1)).getUsrByUserName(user.getUserName());
+        verify(userDao,times(1)).isUserAdmin(user.getUserName());
+        verify(booksManagementDao,times(1)).createBooks(booksDTO1, user.getUserName());
+
+    }
+
+    @Test
+    public void updateBooksTest() throws BadRequestException {
+        BookUser user = Generators.generateTestUser();
+        BooksDTO booksDTO1 = Generators.generateTestBooksDTO1();
+
+        when(userDao.getUsrByUserName(user.getUserName())).thenReturn(user);
+        when(userDao.isUserAdmin(user.getUserName())).thenReturn(true);
+        when(booksManagementDao.getBooksById(user.getId())).thenReturn(user.getId());
+        when(booksManagementDao.updateBooks(booksDTO1,user.getUserName())).thenReturn("true");
+
+        booksManagementService.updateBooks(booksDTO1,user.getUserName());
+
+        verify(userDao,times(1)).getUsrByUserName(user.getUserName());
+        verify(userDao,times(1)).isUserAdmin(user.getUserName());
+        verify(booksManagementDao,times(1)).getBooksById(user.getId());
+        verify(booksManagementDao,times(1)).updateBooks(booksDTO1, user.getUserName());
+
+    }
+
+    @Test
+    public void deleteBooksTest() throws BadRequestException {
+        BookUser user = Generators.generateTestUser();
+        BooksRequest booksRequest1 = Generators.generateTestBooksRequest();
+
+        when(userDao.isUserAdmin(user.getUserName())).thenReturn(true);
+        when(booksManagementDao.getBooksById(user.getId())).thenReturn(user.getId());
+        when(booksManagementDao.deleteBooks(booksRequest1.getId(),user.getUserName())).thenReturn("true");
+
+        booksManagementService.deleteBooks(booksRequest1,user.getUserName());
+
+        verify(userDao,times(1)).isUserAdmin(user.getUserName());
+        verify(booksManagementDao,times(1)).getBooksById(user.getId());
+        verify(booksManagementDao,times(1)).deleteBooks(booksRequest1.getId(), user.getUserName());
+
+    }
 
 }
