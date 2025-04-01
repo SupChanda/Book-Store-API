@@ -14,6 +14,7 @@ import com.book.store.models.mappers.BooksMapper;
 import com.book.store.models.mappers.BooksPurchasedMapper;
 import org.apache.catalina.User;
 import org.apache.coyote.BadRequestException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -60,11 +61,11 @@ public class BooksManagementImplTest {
         when(booksManagementDao.getBooksList()).thenReturn(booksList);
         when(booksMapper.toDTOList(booksList)).thenReturn(booksDTOList);
 
-        booksManagementService.getBooks();
+        List<BooksDTO> booksList1 = booksManagementService.getBooks();
 
         verify(booksManagementDao,times(1)).getBooksList();
         verify(booksMapper,times(1)).toDTOList(booksList);
-
+        Assertions.assertEquals(booksDTOList,booksList1);
     }
 
     @Test
@@ -74,11 +75,11 @@ public class BooksManagementImplTest {
         when(booksManagementDao.getBooksById(books1.getId())).thenReturn(books1);
         when(booksMapper.toDTO(books1)).thenReturn(booksDTO1);
 
-        booksManagementService.getBooksById(books1.getId());
+        Object obj = booksManagementService.getBooksById(books1.getId());
 
         verify(booksManagementDao,times(1)).getBooksById(books1.getId());
         verify(booksMapper,times(1)).toDTO(books1);
-
+        Assertions.assertEquals(obj,booksDTO1);
     }
 
     @Test
@@ -89,12 +90,13 @@ public class BooksManagementImplTest {
         when(userDao.isUserAdmin(user.getUserName())).thenReturn(true);
         when(booksManagementDao.createBooks(booksDTO1,user.getUserName())).thenReturn(true);
 
-        booksManagementService.createBooks(booksDTO1,user.getUserName());
+        String response = booksManagementService.createBooks(booksDTO1,user.getUserName());
 
         verify(userDao,times(1)).getUsrByUserName(user.getUserName());
         verify(userDao,times(1)).isUserAdmin(user.getUserName());
         verify(booksManagementDao,times(1)).createBooks(booksDTO1, user.getUserName());
 
+        Assertions.assertEquals("Quiet Place has been added",response);
     }
 
     @Test
@@ -107,13 +109,13 @@ public class BooksManagementImplTest {
         when(booksManagementDao.getBooksById(user.getId())).thenReturn(user.getId());
         when(booksManagementDao.updateBooks(booksDTO1,user.getUserName())).thenReturn("true");
 
-        booksManagementService.updateBooks(booksDTO1,user.getUserName());
+        String response  = booksManagementService.updateBooks(booksDTO1,user.getUserName());
 
         verify(userDao,times(1)).getUsrByUserName(user.getUserName());
         verify(userDao,times(1)).isUserAdmin(user.getUserName());
         verify(booksManagementDao,times(1)).getBooksById(user.getId());
         verify(booksManagementDao,times(1)).updateBooks(booksDTO1, user.getUserName());
-
+        Assertions.assertEquals("true",response);
     }
 
     @Test
@@ -125,12 +127,13 @@ public class BooksManagementImplTest {
         when(booksManagementDao.getBooksById(user.getId())).thenReturn(user.getId());
         when(booksManagementDao.deleteBooks(booksRequest1.getId(),user.getUserName())).thenReturn("true");
 
-        booksManagementService.deleteBooks(booksRequest1,user.getUserName());
+        String response = booksManagementService.deleteBooks(booksRequest1,user.getUserName());
 
         verify(userDao,times(1)).isUserAdmin(user.getUserName());
         verify(booksManagementDao,times(1)).getBooksById(user.getId());
         verify(booksManagementDao,times(1)).deleteBooks(booksRequest1.getId(), user.getUserName());
 
+        Assertions.assertEquals("true",response);
     }
 
 }
