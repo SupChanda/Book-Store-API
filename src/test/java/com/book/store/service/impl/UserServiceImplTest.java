@@ -12,6 +12,7 @@ import com.book.store.models.domain.BookUser;
 import com.book.store.models.dto.UserDTO;
 import com.book.store.models.mappers.UserMapper;
 import org.apache.coyote.BadRequestException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 // Change to JUnit 5
@@ -49,16 +50,16 @@ public class UserServiceImplTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
+    @Test // add an assert statement to compare actual with expected
     public void getUsrByUserNameTest() throws BadRequestException {
         BookUser bookUser = Generators.generateTestUser();
 
         when(userDao.getUsrByUserName(bookUser.getUserName())).thenReturn(bookUser);
 
-        userService.getUsrByUserName(bookUser.getUserName());
+        BookUser bookUser1 = userService.getUsrByUserName(bookUser.getUserName());
 
         verify(userDao, times(1)).getUsrByUserName(bookUser.getUserName());
-
+        Assertions.assertEquals(bookUser,bookUser1);
 
     }
     @Test
@@ -67,26 +68,27 @@ public class UserServiceImplTest {
 
         when(userDao.getUsrByUserId(bookUser.getId())).thenReturn(bookUser);
 
-        userService.getUsrByUserId(bookUser.getId());
+        BookUser user2 = userService.getUsrByUserId(bookUser.getId());
 
         verify(userDao, times(1)).getUsrByUserId(bookUser.getId());
-
+        Assertions.assertEquals(bookUser,user2);
 
     }
-    @Test
+    @Test //assert usage for all methods
     public void addUserTest() throws BadRequestException{
         UserDTO userDTO = Generators.generateTestUserDTO();
         UserRequest userRequest = Generators.generateTestUserRequest();
 
-        when(userMapper.toUserRequest(userDTO)).thenReturn(userRequest);
+        //when(userMapper.toUserRequest(userDTO)).thenReturn(userRequest);
         when(userDao.addUser(userRequest.getUserName(),userRequest)).thenReturn(true);
 
-        userService.addUser(userRequest);
-        userMapper.toUserRequest(userDTO);
-        userDao.addUser(userRequest.getUserName(),userRequest);
+        String response = userService.addUser(userRequest);
+        //userMapper.toUserRequest(userDTO);
+        //userDao.addUser(userRequest.getUserName(),userRequest);
 
-        verify(userMapper,times(1)).toUserRequest(userDTO);
-        verify(userDao,times(2)).addUser(userRequest.getUserName(),userRequest);
+        //verify(userMapper,times(1)).toUserRequest(userDTO);
+        verify(userDao,times(1)).addUser(userRequest.getUserName(),userRequest);
+        Assertions.assertEquals("Admin user record has been added",response);
 
     }
 
@@ -95,18 +97,20 @@ public class UserServiceImplTest {
         UserDTO userDTO = Generators.generateTestUserDTO();
         UserRequest userRequest = Generators.generateTestUserRequest();
 
+
         when(userDao.isUserAdmin("Admin")).thenReturn(true);
-        when(userMapper.toDTO((BookUser) userDao.getUsrByUserId(userRequest.getId()))).thenReturn(userDTO);
+        //when(userMapper.toDTO((BookUser) userDao.getUsrByUserId(userRequest.getId()))).thenReturn(userDTO);
 
-        userMapper.toUserRequest(userDTO);
-        userService.updateUser(userRequest,"Admin");
+        //userMapper.toUserRequest(userDTO);
+        String response = userService.updateUser(userRequest,"Admin");
 
 
-        verify(userMapper,times(1)).toUserRequest(userDTO);
+        //verify(userMapper,times(1)).toUserRequest(userDTO);
         verify(userDao,times(1)).isUserAdmin("Admin");
-        verify(userDao,times(2)).getUsrByUserId(userRequest.getId());// getUserByUserId is called twice which is this is 2
-        verify(userMapper,times(1)).toDTO((BookUser) userDao.getUsrByUserId(userRequest.getId()));
+        //verify(userDao,times(1)).getUsrByUserId(userRequest.getId());// getUserByUserId is called twice which is this is 2
+        //verify(userMapper,times(1)).toDTO((BookUser) userDao.getUsrByUserId(userRequest.getId()));
         verify(userDao,times(1)).updateUser(userRequest.getId(),userRequest);
+        Assertions.assertEquals("Admin updated Admin record",response);
 
     }
 
@@ -114,11 +118,12 @@ public class UserServiceImplTest {
     public void deleteUserTest() throws BadRequestException{
         BookUser user = Generators.generateTestUser();
         UserDTO userDTO = Generators.generateTestUserDTO();
-        int userId = user.getId();
+        Integer userId = user.getId();
 
         when(userMapper.toDTO(user)).thenReturn(userDTO);
         when(userDao.getUsrByUserId(user.getId())).thenReturn(user);
         when(userDao.getUsrByUserName(user.getUserName())).thenReturn(user);
+        //doNothing().when(userDao.deleteUser(userId,"Admin"));
 
         userService.deleteUser(userId,"Admin");
 
